@@ -8,25 +8,25 @@ import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'home_page_model.dart';
-export 'home_page_model.dart';
+import 'workouts_model.dart';
+export 'workouts_model.dart';
 
-class HomePageWidget extends StatefulWidget {
-  const HomePageWidget({Key? key}) : super(key: key);
+class WorkoutsWidget extends StatefulWidget {
+  const WorkoutsWidget({Key? key}) : super(key: key);
 
   @override
-  _HomePageWidgetState createState() => _HomePageWidgetState();
+  _WorkoutsWidgetState createState() => _WorkoutsWidgetState();
 }
 
-class _HomePageWidgetState extends State<HomePageWidget> {
-  late HomePageModel _model;
+class _WorkoutsWidgetState extends State<WorkoutsWidget> {
+  late WorkoutsModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => HomePageModel());
+    _model = createModel(context, () => WorkoutsModel());
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {});
