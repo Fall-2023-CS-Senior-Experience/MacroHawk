@@ -8,6 +8,13 @@ FlutterFlow projects are built to run on the Flutter _stable_ release.
 
 ## Download App 
 
+Instructions for ios
+1. Email mwhite96@msudenver.edu and request access.
+2. You will receive an email from Apple Store Connect asking you to accept an inviation. Click accept invitation and create an account.
+3. Next, you will need to email mwhite96@msudenver.edu again stating you finished creating an Apple Store Connect account, after you will receive an email inviting you to view MacroHawk in TestFlight.
+4. Download TestFlight by Apple on your iPhone, then open the MacroHawk invite email from your iPhone.
+5. Follow the prompts to download the app.
+
 Instructions for android
 1. On you moblile device go to settings, then security and go to turn off unknow soruces or click on google protect and turn it off. ![image](https://github.com/Fall-2023-CS-Senior-Experience/MacroHawk/assets/91153874/330ecd6f-f286-4b12-a623-3c963300136a)
 
