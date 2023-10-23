@@ -1,11 +1,13 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'sat_card_widget.dart' show SatCardWidget;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class SatCardModel extends FlutterFlowModel {
+class SatCardModel extends FlutterFlowModel<SatCardWidget> {
   ///  Local state fields for this component.
 
   bool toggle = true;

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "613594351059",
+    "project_id": "macrohawk-62e43",
+    "storage_bucket": "macrohawk-62e43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613594351059:android:d9bf989772b87f327edb26",
+        "android_client_info": {
+          "package_name": "com.mattheww.macrohawk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlIMurzGvr1ZFKJAFfsuHXdZTtnE5bG8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613594351059:android:82158844f289e0037edb26",
+        "android_client_info": {
+          "package_name": "com.mycompany.macrohawk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlIMurzGvr1ZFKJAFfsuHXdZTtnE5bG8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
