@@ -1,4 +1,4 @@
-package com.mycompany.macrohawk
+package com.mattheww.macrohawk
 
 import io.flutter.embedding.android.FlutterActivity
 
