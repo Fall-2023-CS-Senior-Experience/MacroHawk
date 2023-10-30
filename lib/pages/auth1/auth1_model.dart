@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_button_tabbar.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -31,22 +32,32 @@ class Auth1Model extends FlutterFlowModel<Auth1Widget> {
   TextEditingController? passwordController;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? passwordControllerValidator;
-  // State field(s) for emailAddress_Create widget.
-  FocusNode? emailAddressCreateFocusNode;
-  TextEditingController? emailAddressCreateController;
-  String? Function(BuildContext, String?)?
-      emailAddressCreateControllerValidator;
+  // State field(s) for displayName widget.
+  FocusNode? displayNameFocusNode;
+  TextEditingController? displayNameController;
+  String? Function(BuildContext, String?)? displayNameControllerValidator;
+  // State field(s) for emailCreate widget.
+  FocusNode? emailCreateFocusNode;
+  TextEditingController? emailCreateController;
+  String? Function(BuildContext, String?)? emailCreateControllerValidator;
   // State field(s) for password_create widget.
   FocusNode? passwordCreateFocusNode;
   TextEditingController? passwordCreateController;
   late bool passwordCreateVisibility;
   String? Function(BuildContext, String?)? passwordCreateControllerValidator;
+  // State field(s) for passwordConfirm_create widget.
+  FocusNode? passwordConfirmCreateFocusNode;
+  TextEditingController? passwordConfirmCreateController;
+  late bool passwordConfirmCreateVisibility;
+  String? Function(BuildContext, String?)?
+      passwordConfirmCreateControllerValidator;
 
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
     passwordVisibility = false;
     passwordCreateVisibility = false;
+    passwordConfirmCreateVisibility = false;
   }
 
   void dispose() {
@@ -58,11 +69,17 @@ class Auth1Model extends FlutterFlowModel<Auth1Widget> {
     passwordFocusNode?.dispose();
     passwordController?.dispose();
 
-    emailAddressCreateFocusNode?.dispose();
-    emailAddressCreateController?.dispose();
+    displayNameFocusNode?.dispose();
+    displayNameController?.dispose();
+
+    emailCreateFocusNode?.dispose();
+    emailCreateController?.dispose();
 
     passwordCreateFocusNode?.dispose();
     passwordCreateController?.dispose();
+
+    passwordConfirmCreateFocusNode?.dispose();
+    passwordConfirmCreateController?.dispose();
   }
 
   /// Action blocks are added here.

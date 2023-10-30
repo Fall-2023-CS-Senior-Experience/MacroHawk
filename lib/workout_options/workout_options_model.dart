@@ -1,32 +1,28 @@
-import '/backend/backend.dart';
-import '/components/calender_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'macros_widget.dart' show MacrosWidget;
+import 'workout_options_widget.dart' show WorkoutOptionsWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-class MacrosModel extends FlutterFlowModel<MacrosWidget> {
-  ///  Local state fields for this page.
-
-  DateTime? localday;
-
-  DateTime? localweek;
-
-  DateTime? localmonth;
-
+class WorkoutOptionsModel extends FlutterFlowModel<WorkoutOptionsWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // State field(s) for TabBar widget.
-  TabController? tabBarController;
-  int get tabBarCurrentIndex =>
-      tabBarController != null ? tabBarController!.index : 0;
+  // State field(s) for CheckboxListTile widget.
+  bool? checkboxListTileValue1;
+  // State field(s) for CheckboxListTile widget.
+  bool? checkboxListTileValue2;
+  // State field(s) for CheckboxListTile widget.
+  bool? checkboxListTileValue3;
+  // State field(s) for CheckboxListTile widget.
+  bool? checkboxListTileValue4;
+  // State field(s) for CheckboxListTile widget.
+  bool? checkboxListTileValue5;
 
   /// Initialization and disposal methods.
 
@@ -34,7 +30,6 @@ class MacrosModel extends FlutterFlowModel<MacrosWidget> {
 
   void dispose() {
     unfocusNode.dispose();
-    tabBarController?.dispose();
   }
 
   /// Action blocks are added here.

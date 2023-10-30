@@ -61,6 +61,33 @@ class MacrosCall {
       );
 }
 
+class WorkoutsCall {
+  static Future<ApiCallResponse> call({
+    String? muscle = '',
+    String? difficulty = '',
+    String? type = '',
+  }) async {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Workouts',
+      apiUrl: 'https://api.api-ninjas.com/v1/exercises',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer iUE+ceYF8wCQr6DQZYHr3A==TX3oh4qjF56l6a8D',
+        'X-Api-Key': 'iUE+ceYF8wCQr6DQZYHr3A==TX3oh4qjF56l6a8D',
+      },
+      params: {
+        'type': type,
+        'muscle': muscle,
+        'difficulty': difficulty,
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+}
+
 class ApiPagingParams {
   int nextPageNumber = 0;
   int numItems = 0;

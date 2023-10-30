@@ -1,3 +1,4 @@
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -50,21 +51,21 @@ class _CardiWorkout1WidgetState extends State<CardiWorkout1Widget> {
       key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: FlutterFlowTheme.of(context).primary,
         automaticallyImplyLeading: false,
-        leading: InkWell(
-          splashColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () async {
+        leading: FlutterFlowIconButton(
+          borderColor: Colors.transparent,
+          borderRadius: 30.0,
+          borderWidth: 1.0,
+          buttonSize: 60.0,
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.white,
+            size: 30.0,
+          ),
+          onPressed: () async {
             context.pop();
           },
-          child: Icon(
-            Icons.chevron_left_rounded,
-            color: Color(0xFF0F1113),
-            size: 32.0,
-          ),
         ),
         title: Text(
           'Workout Details',
@@ -76,8 +77,8 @@ class _CardiWorkout1WidgetState extends State<CardiWorkout1Widget> {
               ),
         ),
         actions: [],
-        centerTitle: false,
-        elevation: 0.0,
+        centerTitle: true,
+        elevation: 2.0,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -157,8 +158,8 @@ class _CardiWorkout1WidgetState extends State<CardiWorkout1Widget> {
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 24.0),
                 child: FFButtonWidget(
-                  onPressed: () {
-                    print('ButtonPrimary pressed ...');
+                  onPressed: () async {
+                    context.pushNamed('CardioBlastBegin');
                   },
                   text: 'Begin!',
                   options: FFButtonOptions(

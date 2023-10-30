@@ -1,22 +1,25 @@
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'sat_card_widget.dart' show SatCardWidget;
+import '/flutter_flow/flutter_flow_widgets.dart';
+import 'chosen_workout_widget.dart' show ChosenWorkoutWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class SatCardModel extends FlutterFlowModel<SatCardWidget> {
-  ///  Local state fields for this component.
+class ChosenWorkoutModel extends FlutterFlowModel<ChosenWorkoutWidget> {
+  ///  State fields for stateful widgets in this page.
 
-  bool toggle = true;
+  final unfocusNode = FocusNode();
 
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}
 
-  void dispose() {}
+  void dispose() {
+    unfocusNode.dispose();
+  }
 
   /// Action blocks are added here.
 

@@ -77,6 +77,12 @@ class FFAppState extends ChangeNotifier {
   set monthE(DateTime? _value) {
     _monthE = _value;
   }
+
+  String _tabindexMacros = 'type';
+  String get tabindexMacros => _tabindexMacros;
+  set tabindexMacros(String _value) {
+    _tabindexMacros = _value;
+  }
 }
 
 LatLng? _latLngFromString(String? val) {

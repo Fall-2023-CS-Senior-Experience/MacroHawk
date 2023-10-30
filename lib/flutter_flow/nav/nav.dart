@@ -79,20 +79,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? HomePageWidget() : Auth1Widget(),
+          appStateNotifier.loggedIn ? NavBarPage() : SplashPageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? HomePageWidget() : Auth1Widget(),
-        ),
-        FFRoute(
-          name: 'HomePage',
-          path: '/homePage',
-          builder: (context, params) => HomePageWidget(
-            dayToggle: params.getParam('dayToggle', ParamType.bool),
-          ),
+              appStateNotifier.loggedIn ? NavBarPage() : SplashPageWidget(),
         ),
         FFRoute(
           name: 'Workouts',
@@ -102,12 +95,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'Macros',
           path: '/macros',
-          builder: (context, params) => MacrosWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Macros')
+              : MacrosWidget(),
         ),
         FFRoute(
           name: 'Profile',
           path: '/profile',
-          builder: (context, params) => ProfileWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Profile')
+              : ProfileWidget(),
         ),
         FFRoute(
           name: 'Auth1',
@@ -122,14 +119,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'secret',
-          path: '/secret',
-          builder: (context, params) => SecretWidget(),
-        ),
-        FFRoute(
           name: 'WorkoutPlans',
           path: '/workoutPlans',
-          builder: (context, params) => WorkoutPlansWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'WorkoutPlans')
+              : WorkoutPlansWidget(),
         ),
         FFRoute(
           name: 'CardiWorkout1',
@@ -151,11 +145,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'historyTest',
-          path: '/historyTest',
-          builder: (context, params) => HistoryTestWidget(),
-        ),
-        FFRoute(
           name: 'Lunch',
           path: '/lunch',
           builder: (context, params) => LunchWidget(
@@ -175,6 +164,32 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SnackWidget(
             mealtime: params.getParam('mealtime', ParamType.String),
           ),
+        ),
+        FFRoute(
+          name: 'Goals',
+          path: '/goals',
+          builder: (context, params) => GoalsWidget(),
+        ),
+        FFRoute(
+          name: 'Home',
+          path: '/home',
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Home') : HomeWidget(),
+        ),
+        FFRoute(
+          name: 'SplashPage',
+          path: '/splashPage',
+          builder: (context, params) => SplashPageWidget(),
+        ),
+        FFRoute(
+          name: 'WorkoutOptions',
+          path: '/workoutOptions',
+          builder: (context, params) => WorkoutOptionsWidget(),
+        ),
+        FFRoute(
+          name: 'ChosenWorkout',
+          path: '/chosenWorkout',
+          builder: (context, params) => ChosenWorkoutWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -341,7 +356,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/auth1';
+            return '/splashPage';
           }
           return null;
         },
