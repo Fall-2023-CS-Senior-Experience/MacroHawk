@@ -230,7 +230,7 @@ class _SplashPageWidgetState extends State<SplashPageWidget>
                         padding: EdgeInsetsDirectional.fromSTEB(
                             44.0, 8.0, 44.0, 0.0),
                         child: Text(
-                          'Welcome to MacroHawk, an app that lets you track your workouts and macronutrients and find information about workouts and nutrition.\n\nClick \"Get Started\" below to create an account or sign in to an existing account.',
+                          'Welcome to MacroHawk, an app that lets you track your workouts and macronutrients and find information about workouts and nutrition.\n\nClick \"Get Started\" below to create a profile and set your goals.',
                           textAlign: TextAlign.center,
                           style: FlutterFlowTheme.of(context)
                               .labelMedium
@@ -262,7 +262,7 @@ class _SplashPageWidgetState extends State<SplashPageWidget>
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 16.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            context.pushNamed('Auth1');
+                            context.pushNamed('namePage');
                           },
                           text: 'Get Started',
                           options: FFButtonOptions(

@@ -14,6 +14,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class GoalsModel extends FlutterFlowModel<GoalsWidget> {
+  ///  Local state fields for this page.
+
+  bool monday = false;
+
+  bool tuesday = false;
+
+  bool wednesday = false;
+
+  bool thursday = false;
+
+  bool friday = false;
+
+  bool saturday = false;
+
+  bool sunday = false;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

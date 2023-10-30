@@ -19,3 +19,8 @@ export '/pages/home/home_widget.dart' show HomeWidget;
 export '/pages/splash_page/splash_page_widget.dart' show SplashPageWidget;
 export '/workout_options/workout_options_widget.dart' show WorkoutOptionsWidget;
 export '/chosen_workout/chosen_workout_widget.dart' show ChosenWorkoutWidget;
+export '/pages/name_page/name_page_widget.dart' show NamePageWidget;
+export '/pages/set_nutri_goals_page/set_nutri_goals_page_widget.dart'
+    show SetNutriGoalsPageWidget;
+export '/pages/set_workout_goals_page_copy/set_workout_goals_page_copy_widget.dart'
+    show SetWorkoutGoalsPageCopyWidget;

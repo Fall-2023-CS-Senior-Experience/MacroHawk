@@ -102,9 +102,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'Profile',
           path: '/profile',
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Profile')
-              : ProfileWidget(),
+          builder: (context, params) => ProfileWidget(),
         ),
         FFRoute(
           name: 'Auth1',
@@ -190,6 +188,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'ChosenWorkout',
           path: '/chosenWorkout',
           builder: (context, params) => ChosenWorkoutWidget(),
+        ),
+        FFRoute(
+          name: 'namePage',
+          path: '/namePage',
+          builder: (context, params) => NamePageWidget(),
+        ),
+        FFRoute(
+          name: 'setNutriGoalsPage',
+          path: '/setNutriGoalsPage',
+          builder: (context, params) => SetNutriGoalsPageWidget(),
+        ),
+        FFRoute(
+          name: 'setWorkoutGoalsPageCopy',
+          path: '/setWorkoutGoalsPageCopy',
+          builder: (context, params) => SetWorkoutGoalsPageCopyWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

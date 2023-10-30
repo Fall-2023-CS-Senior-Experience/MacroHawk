@@ -116,24 +116,22 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
             mainAxisSize: MainAxisSize.max,
             children: [
               Text(
-                'Welcome,',
+                'Welcome, ',
                 style: FlutterFlowTheme.of(context).displaySmall.override(
                       fontFamily: 'Outfit',
                       color: Colors.white,
                       fontSize: 28.0,
                     ),
               ).animateOnPageLoad(animationsMap['textOnPageLoadAnimation1']!),
-              AuthUserStreamWidget(
-                builder: (context) => Text(
-                  currentUserDisplayName,
-                  style: FlutterFlowTheme.of(context).displaySmall.override(
-                        fontFamily: 'Outfit',
-                        color: Colors.white,
-                        fontSize: 28.0,
-                        decoration: TextDecoration.underline,
-                      ),
-                ).animateOnPageLoad(animationsMap['textOnPageLoadAnimation2']!),
-              ),
+              Text(
+                FFAppState().displayName,
+                style: FlutterFlowTheme.of(context).displaySmall.override(
+                      fontFamily: 'Outfit',
+                      color: Colors.white,
+                      fontSize: 28.0,
+                      decoration: TextDecoration.underline,
+                    ),
+              ).animateOnPageLoad(animationsMap['textOnPageLoadAnimation2']!),
             ],
           ),
           actions: [],
@@ -196,27 +194,24 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-                                  AuthUserStreamWidget(
-                                    builder: (context) =>
-                                        CircularPercentIndicator(
-                                      percent: 0.5,
-                                      radius: 60.0,
-                                      lineWidth: 12.0,
-                                      animation: true,
-                                      animateFromLastPercent: true,
-                                      progressColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context).accent4,
-                                      center: Text(
-                                        'VAR /${valueOrDefault(currentUserDocument?.calorieGoal, 0.0).toString()}',
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineSmall
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              fontSize: 12.0,
-                                            ),
-                                      ),
+                                  CircularPercentIndicator(
+                                    percent: 0.5,
+                                    radius: 60.0,
+                                    lineWidth: 12.0,
+                                    animation: true,
+                                    animateFromLastPercent: true,
+                                    progressColor:
+                                        FlutterFlowTheme.of(context).primary,
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).accent4,
+                                    center: Text(
+                                      '${FFAppState().dayCalories.toString()} / ${FFAppState().calorieGoal.toString()}',
+                                      style: FlutterFlowTheme.of(context)
+                                          .headlineSmall
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 12.0,
+                                          ),
                                     ),
                                   ),
                                 ],
@@ -246,27 +241,24 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-                                  AuthUserStreamWidget(
-                                    builder: (context) =>
-                                        CircularPercentIndicator(
-                                      percent: 0.5,
-                                      radius: 60.0,
-                                      lineWidth: 12.0,
-                                      animation: true,
-                                      animateFromLastPercent: true,
-                                      progressColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context).accent4,
-                                      center: Text(
-                                        'VAR /${valueOrDefault(currentUserDocument?.fatGoal, 0.0).toString()}',
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineSmall
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              fontSize: 12.0,
-                                            ),
-                                      ),
+                                  CircularPercentIndicator(
+                                    percent: 0.5,
+                                    radius: 60.0,
+                                    lineWidth: 12.0,
+                                    animation: true,
+                                    animateFromLastPercent: true,
+                                    progressColor:
+                                        FlutterFlowTheme.of(context).primary,
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).accent4,
+                                    center: Text(
+                                      '${FFAppState().dayFat.toString()} / ${FFAppState().fatGoal.toString()}',
+                                      style: FlutterFlowTheme.of(context)
+                                          .headlineSmall
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 12.0,
+                                          ),
                                     ),
                                   ),
                                 ],
@@ -296,27 +288,24 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-                                  AuthUserStreamWidget(
-                                    builder: (context) =>
-                                        CircularPercentIndicator(
-                                      percent: 0.5,
-                                      radius: 60.0,
-                                      lineWidth: 12.0,
-                                      animation: true,
-                                      animateFromLastPercent: true,
-                                      progressColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context).accent4,
-                                      center: Text(
-                                        'VAR /${valueOrDefault(currentUserDocument?.proteinGoal, 0.0).toString()}',
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineSmall
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              fontSize: 12.0,
-                                            ),
-                                      ),
+                                  CircularPercentIndicator(
+                                    percent: 0.5,
+                                    radius: 60.0,
+                                    lineWidth: 12.0,
+                                    animation: true,
+                                    animateFromLastPercent: true,
+                                    progressColor:
+                                        FlutterFlowTheme.of(context).primary,
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).accent4,
+                                    center: Text(
+                                      '${FFAppState().dayProtein.toString()} / ${FFAppState().proteinGoal.toString()}',
+                                      style: FlutterFlowTheme.of(context)
+                                          .headlineSmall
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 12.0,
+                                          ),
                                     ),
                                   ),
                                 ],
@@ -346,27 +335,24 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-                                  AuthUserStreamWidget(
-                                    builder: (context) =>
-                                        CircularPercentIndicator(
-                                      percent: 0.5,
-                                      radius: 60.0,
-                                      lineWidth: 12.0,
-                                      animation: true,
-                                      animateFromLastPercent: true,
-                                      progressColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context).accent4,
-                                      center: Text(
-                                        'VAR /${valueOrDefault(currentUserDocument?.carbGoal, 0.0).toString()}',
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineSmall
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              fontSize: 12.0,
-                                            ),
-                                      ),
+                                  CircularPercentIndicator(
+                                    percent: 0.5,
+                                    radius: 60.0,
+                                    lineWidth: 12.0,
+                                    animation: true,
+                                    animateFromLastPercent: true,
+                                    progressColor:
+                                        FlutterFlowTheme.of(context).primary,
+                                    backgroundColor:
+                                        FlutterFlowTheme.of(context).accent4,
+                                    center: Text(
+                                      '${FFAppState().dayCarbs.toString()} / ${FFAppState().carbGoal.toString()}',
+                                      style: FlutterFlowTheme.of(context)
+                                          .headlineSmall
+                                          .override(
+                                            fontFamily: 'Outfit',
+                                            fontSize: 12.0,
+                                          ),
                                     ),
                                   ),
                                 ],
@@ -378,10 +364,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                           options: CarouselOptions(
                             initialPage: 1,
                             viewportFraction: 0.5,
-                            disableCenter: true,
+                            disableCenter: false,
                             enlargeCenterPage: true,
                             enlargeFactor: 0.25,
-                            enableInfiniteScroll: true,
+                            enableInfiniteScroll: false,
                             scrollDirection: Axis.horizontal,
                             autoPlay: false,
                             onPageChanged: (index, _) =>
@@ -401,29 +387,27 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional(-1.00, 0.00),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 5.0, 5.0, 5.0),
-                          child: Text(
-                            'Workouts',
-                            style: FlutterFlowTheme.of(context).headlineMedium,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(-1.00, 0.00),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                5.0, 5.0, 5.0, 5.0),
+                            child: Text(
+                              'Workouts',
+                              style:
+                                  FlutterFlowTheme.of(context).headlineMedium,
+                            ),
                           ),
                         ),
-                      ),
-                      AuthUserStreamWidget(
-                        builder: (context) => Builder(
+                        Builder(
                           builder: (context) {
-                            final workoutDay = (currentUserDocument
-                                        ?.workoutDaysGoal
-                                        ?.toList() ??
-                                    [])
-                                .toList();
+                            final workoutDay =
+                                FFAppState().workoutDaysGoal.toList();
                             return ListView.builder(
                               padding: EdgeInsets.zero,
                               shrinkWrap: true,
@@ -468,8 +452,39 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                             );
                           },
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                child: FFButtonWidget(
+                  onPressed: () async {
+                    GoRouter.of(context).prepareAuthEvent();
+                    await authManager.signOut();
+                    GoRouter.of(context).clearRedirectLocation();
+
+                    context.goNamedAuth('SplashPage', context.mounted);
+                  },
+                  text: 'Button',
+                  options: FFButtonOptions(
+                    height: 40.0,
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: FlutterFlowTheme.of(context).primary,
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Readex Pro',
+                          color: Colors.white,
+                        ),
+                    elevation: 3.0,
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
               ),

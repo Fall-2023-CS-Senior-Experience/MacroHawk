@@ -137,7 +137,6 @@ class _NavBarPageState extends State<NavBarPage> {
       'Macros': MacrosWidget(),
       'Home': HomeWidget(),
       'WorkoutPlans': WorkoutPlansWidget(),
-      'Profile': ProfileWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -177,14 +176,6 @@ class _NavBarPageState extends State<NavBarPage> {
               Icons.fitness_center,
             ),
             label: 'Workouts',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              size: 24.0,
-            ),
-            label: 'Profile',
             tooltip: '',
           )
         ],
