@@ -1,10 +1,4 @@
 # MacroHawk
-[![Codemagic build status](https://api.codemagic.io/apps/65148f117786737936fec0d7/65148f117786737936fec0d6/status_badge.svg)](https://codemagic.io/apps/65148f117786737936fec0d7/65148f117786737936fec0d6/latest_build)
-A new Flutter project.
-
-## Getting Started
-
-FlutterFlow projects are built to run on the Flutter _stable_ release.
 
 ## Download App 
 
@@ -25,5 +19,3 @@ Instructions for android
 4. click on app-relase.apk, then click on install. ![image](https://github.com/Fall-2023-CS-Senior-Experience/MacroHawk/assets/91153874/49baaf56-0a77-4035-a53c-385a092c7def)
 
 5. Once the install is complete. Fine Macrohawk and now you can run the app. ![image](https://github.com/Fall-2023-CS-Senior-Experience/MacroHawk/assets/91153874/ecab3952-9ac9-459f-9b08-89f45be50fa8)
-
-

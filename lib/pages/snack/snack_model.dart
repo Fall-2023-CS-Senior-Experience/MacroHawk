@@ -8,6 +8,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'snack_widget.dart' show SnackWidget;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,18 @@ class SnackModel extends FlutterFlowModel<SnackWidget> {
   DateTime? dinnerStart;
 
   DateTime? dinnerEnd;
+
+  List<NutritionRecord> snackListname = [];
+  void addToSnackListname(NutritionRecord item) => snackListname.add(item);
+  void removeFromSnackListname(NutritionRecord item) =>
+      snackListname.remove(item);
+  void removeAtIndexFromSnackListname(int index) =>
+      snackListname.removeAt(index);
+  void insertAtIndexInSnackListname(int index, NutritionRecord item) =>
+      snackListname.insert(index, item);
+  void updateSnackListnameAtIndex(
+          int index, Function(NutritionRecord) updateFn) =>
+      snackListname[index] = updateFn(snackListname[index]);
 
   ///  State fields for stateful widgets in this page.
 

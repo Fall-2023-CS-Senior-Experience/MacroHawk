@@ -1,32 +1,23 @@
-import '/backend/backend.dart';
-import '/components/calender_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'macros_widget.dart' show MacrosWidget;
+import 'dart:async';
+import 'name_page_widget.dart' show NamePageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-class MacrosModel extends FlutterFlowModel<MacrosWidget> {
-  ///  Local state fields for this page.
-
-  DateTime? localday;
-
-  DateTime? localweek;
-
-  DateTime? localmonth;
-
+class NamePageModel extends FlutterFlowModel<NamePageWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // State field(s) for TabBar widget.
-  TabController? tabBarController;
-  int get tabBarCurrentIndex =>
-      tabBarController != null ? tabBarController!.index : 0;
+  // State field(s) for TextField widget.
+  FocusNode? textFieldFocusNode;
+  TextEditingController? textController;
+  String? Function(BuildContext, String?)? textControllerValidator;
 
   /// Initialization and disposal methods.
 
@@ -34,7 +25,8 @@ class MacrosModel extends FlutterFlowModel<MacrosWidget> {
 
   void dispose() {
     unfocusNode.dispose();
-    tabBarController?.dispose();
+    textFieldFocusNode?.dispose();
+    textController?.dispose();
   }
 
   /// Action blocks are added here.
