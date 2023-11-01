@@ -131,6 +131,15 @@ class _SplashPageWidgetState extends State<SplashPageWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => SplashPageModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if (FFAppState().displayName != 'User') {
+        context.pushNamed('Home');
+      } else {
+        return;
+      }
+    });
   }
 
   @override
