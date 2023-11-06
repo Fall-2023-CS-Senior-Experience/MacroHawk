@@ -5,16 +5,15 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'macrospop_model.dart';
-export 'macrospop_model.dart';
+import 'macrospop_local_model.dart';
+export 'macrospop_local_model.dart';
 
-class MacrospopWidget extends StatefulWidget {
-  const MacrospopWidget({
+class MacrospopLocalWidget extends StatefulWidget {
+  const MacrospopLocalWidget({
     Key? key,
     required this.callname,
     required this.callbrand,
@@ -28,11 +27,11 @@ class MacrospopWidget extends StatefulWidget {
   final String? mealtime;
 
   @override
-  _MacrospopWidgetState createState() => _MacrospopWidgetState();
+  _MacrospopLocalWidgetState createState() => _MacrospopLocalWidgetState();
 }
 
-class _MacrospopWidgetState extends State<MacrospopWidget> {
-  late MacrospopModel _model;
+class _MacrospopLocalWidgetState extends State<MacrospopLocalWidget> {
+  late MacrospopLocalModel _model;
 
   @override
   void setState(VoidCallback callback) {
@@ -43,7 +42,7 @@ class _MacrospopWidgetState extends State<MacrospopWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => MacrospopModel());
+    _model = createModel(context, () => MacrospopLocalModel());
 
     _model.textFieldNameFocusNode ??= FocusNode();
 
@@ -599,47 +598,23 @@ class _MacrospopWidgetState extends State<MacrospopWidget> {
               children: [
                 FFButtonWidget(
                   onPressed: () async {
-                    _model.getUserId = await queryUsersRecordOnce(
-                      queryBuilder: (usersRecord) => usersRecord.where(
-                        'display_name',
-                        isEqualTo: FFAppState().displayName,
-                      ),
-                      singleRecord: true,
-                    ).then((s) => s.firstOrNull);
-
-                    await NutritionsRecord.createDoc(
-                            _model.getUserId!.reference)
-                        .set(createNutritionsRecordData(
-                      image: _model.foodpic,
-                      name: _model.textFieldNameController.text,
-                      calories: _model.textFieldCalController.text,
-                      carbs: _model.textFieldCarbController.text,
-                      proteins: _model.textFieldProController.text,
-                      fats: _model.textFieldFatController.text,
-                      currentTime: getCurrentTimestamp,
-                      mealtime: widget.mealtime,
-                    ));
-                    FFAppState().update(() {
-                      FFAppState().dayCalories = FFAppState().dayCalories +
-                          int.parse(_model.textFieldCalController.text) +
-                          FFAppState().dayCalories;
-                      FFAppState().dayFat = FFAppState().dayFat +
-                          int.parse(_model.textFieldFatController.text) +
-                          FFAppState().dayFat;
-                      FFAppState().dayProtein = FFAppState().dayProtein +
-                          int.parse(_model.textFieldProController.text) +
-                          FFAppState().dayProtein;
-                      FFAppState().dayCarbs = FFAppState().dayCarbs +
-                          int.parse(_model.textFieldCarbController.text) +
-                          FFAppState().dayCarbs;
-                    });
+                    await NutritionRecord.collection
+                        .doc()
+                        .set(createNutritionRecordData(
+                          image: _model.foodpic,
+                          name: _model.textFieldNameController.text,
+                          calories: _model.textFieldCalController.text,
+                          carbs: _model.textFieldCarbController.text,
+                          proteins: _model.textFieldProController.text,
+                          fats: _model.textFieldFatController.text,
+                          currentTime: getCurrentTimestamp,
+                          mealtime: widget.mealtime,
+                        ));
                     Navigator.pop(context);
-
-                    setState(() {});
                   },
                   text: 'Save',
                   options: FFButtonOptions(
-                    height: 37.0,
+                    height: 40.0,
                     padding:
                         EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
                     iconPadding:

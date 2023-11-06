@@ -26,6 +26,8 @@ class _WorkoutPlansWidgetState extends State<WorkoutPlansWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => WorkoutPlansModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -79,7 +81,29 @@ class _WorkoutPlansWidgetState extends State<WorkoutPlansWidget> {
                   fontSize: 37.0,
                 ),
           ),
-          actions: [],
+          actions: [
+            InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () async {
+                context.pushNamed('Profile');
+              },
+              child: Container(
+                width: 120.0,
+                height: 120.0,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: Image.network(
+                  'https://picsum.photos/seed/300/600',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ],
           centerTitle: true,
           elevation: 2.0,
         ),

@@ -34,6 +34,8 @@ class _FoodApiResultsWidgetState extends State<FoodApiResultsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => FoodApiResultsModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -134,9 +136,7 @@ class _FoodApiResultsWidgetState extends State<FoodApiResultsWidget> {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      MacrosCall.image(
-                        imageMacrosResponse.jsonBody,
-                      ),
+                      'https://picsum.photos/seed/197/600',
                       width: MediaQuery.sizeOf(context).width * 1.0,
                       height: MediaQuery.sizeOf(context).height * 0.3,
                       fit: BoxFit.cover,

@@ -61,6 +61,8 @@ class _CardioBlastBeginWidgetState extends State<CardioBlastBeginWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => CardioBlastBeginModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

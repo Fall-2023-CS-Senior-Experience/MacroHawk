@@ -110,18 +110,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Auth1Widget(),
         ),
         FFRoute(
-          name: 'Breakfast',
-          path: '/breakfast',
-          builder: (context, params) => BreakfastWidget(
-            mealtime: params.getParam('mealtime', ParamType.String),
-          ),
-        ),
-        FFRoute(
           name: 'WorkoutPlans',
           path: '/workoutPlans',
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'WorkoutPlans')
-              : WorkoutPlansWidget(),
+          builder: (context, params) => WorkoutPlansWidget(),
         ),
         FFRoute(
           name: 'CardiWorkout1',
@@ -140,20 +131,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             checkfood: params.getParam('checkfood', ParamType.String),
             checkbrand: params.getParam('checkbrand', ParamType.String),
             checktype: params.getParam('checktype', ParamType.String),
-          ),
-        ),
-        FFRoute(
-          name: 'Lunch',
-          path: '/lunch',
-          builder: (context, params) => LunchWidget(
-            mealtime: params.getParam('mealtime', ParamType.String),
-          ),
-        ),
-        FFRoute(
-          name: 'Dinner',
-          path: '/dinner',
-          builder: (context, params) => DinnerWidget(
-            mealtime: params.getParam('mealtime', ParamType.String),
           ),
         ),
         FFRoute(
@@ -200,9 +177,47 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SetNutriGoalsPageWidget(),
         ),
         FFRoute(
-          name: 'setWorkoutGoalsPageCopy',
-          path: '/setWorkoutGoalsPageCopy',
-          builder: (context, params) => SetWorkoutGoalsPageCopyWidget(),
+          name: 'setWorkoutGoalsPage',
+          path: '/setWorkoutGoalsPage',
+          builder: (context, params) => SetWorkoutGoalsPageWidget(),
+        ),
+        FFRoute(
+          name: 'Lunch',
+          path: '/lunch',
+          builder: (context, params) => LunchWidget(
+            mealtime: params.getParam('mealtime', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'Dinner',
+          path: '/dinner',
+          builder: (context, params) => DinnerWidget(
+            mealtime: params.getParam('mealtime', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'Breakfast',
+          path: '/breakfast',
+          builder: (context, params) => BreakfastWidget(
+            mealtime: params.getParam('mealtime', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'addExercise',
+          path: '/addExercise',
+          builder: (context, params) => AddExerciseWidget(),
+        ),
+        FFRoute(
+          name: 'testWorkouts',
+          path: '/testWorkouts',
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'testWorkouts')
+              : TestWorkoutsWidget(),
+        ),
+        FFRoute(
+          name: 'addWorkout',
+          path: '/addWorkout',
+          builder: (context, params) => AddWorkoutWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

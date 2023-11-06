@@ -1,10 +1,14 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/calender_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -30,11 +34,27 @@ class _MacrosWidgetState extends State<MacrosWidget>
     super.initState();
     _model = createModel(context, () => MacrosModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.querymacros = await queryNutritionRecordOnce(
+        queryBuilder: (nutritionRecord) => nutritionRecord
+            .where(
+              'current_time',
+              isLessThanOrEqualTo: FFAppState().dayE,
+            )
+            .where(
+              'current_time',
+              isGreaterThanOrEqualTo: FFAppState().dayS,
+            ),
+      );
+    });
+
     _model.tabBarController = TabController(
       vsync: this,
       length: 3,
       initialIndex: 0,
     )..addListener(() => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -280,7 +300,9 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                       backgroundColor:
                                           FlutterFlowTheme.of(context).accent4,
                                       center: Text(
-                                        '%',
+                                        (FFAppState().dayCalories /
+                                                FFAppState().calorieGoal)
+                                            .toString(),
                                         style: FlutterFlowTheme.of(context)
                                             .headlineSmall,
                                       ),
@@ -292,12 +314,63 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Text(
-                                            'Hello World',
+                                            'Protein',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium,
                                           ),
-                                          LinearPercentIndicator(
-                                            percent: 0.5,
+                                          Expanded(
+                                            child: LinearPercentIndicator(
+                                              percent: (FFAppState()
+                                                          .dayProtein /
+                                                      FFAppState().proteinGoal)
+                                                  .toDouble(),
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width *
+                                                  0.5,
+                                              lineHeight: 15.0,
+                                              animation: true,
+                                              animateFromLastPercent: true,
+                                              progressColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .accent4,
+                                              center: Text(
+                                                FFAppState()
+                                                    .dayProtein
+                                                    .toString(),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily: 'Outfit',
+                                                          fontSize: 14.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                              ),
+                                              padding: EdgeInsets.zero,
+                                            ),
+                                          ),
+                                        ]
+                                            .divide(SizedBox(width: 20.0))
+                                            .addToStart(SizedBox(width: 50.0)),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          'Fat',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                        ),
+                                        Expanded(
+                                          child: LinearPercentIndicator(
+                                            percent: (FFAppState().dayFat /
+                                                    FFAppState().fatGoal)
+                                                .toDouble(),
                                             width: MediaQuery.sizeOf(context)
                                                     .width *
                                                 0.5,
@@ -311,7 +384,9 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                                 FlutterFlowTheme.of(context)
                                                     .accent4,
                                             center: Text(
-                                              '%',
+                                              (FFAppState().dayFat /
+                                                      FFAppState().fatGoal)
+                                                  .toString(),
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .headlineSmall
@@ -324,18 +399,6 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                             ),
                                             padding: EdgeInsets.zero,
                                           ),
-                                        ]
-                                            .divide(SizedBox(width: 20.0))
-                                            .addToStart(SizedBox(width: 50.0)),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'Hello World',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
                                         ),
                                       ]
                                           .divide(SizedBox(width: 20.0))
@@ -345,9 +408,43 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Text(
-                                          'Hello World',
+                                          'Carbs',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium,
+                                        ),
+                                        Expanded(
+                                          child: LinearPercentIndicator(
+                                            percent: (FFAppState().dayCarbs /
+                                                    FFAppState().carbGoal)
+                                                .toDouble(),
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.5,
+                                            lineHeight: 15.0,
+                                            animation: true,
+                                            animateFromLastPercent: true,
+                                            progressColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .accent4,
+                                            center: Text(
+                                              (FFAppState().dayCarbs /
+                                                      FFAppState().carbGoal)
+                                                  .toString(),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .headlineSmall
+                                                      .override(
+                                                        fontFamily: 'Outfit',
+                                                        fontSize: 14.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                            ),
+                                            padding: EdgeInsets.zero,
+                                          ),
                                         ),
                                       ]
                                           .divide(SizedBox(width: 20.0))
@@ -440,100 +537,6 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                           .divide(SizedBox(width: 10.0))
                                           .addToStart(SizedBox(width: 10.0)),
                                     ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 10.0, 0.0, 0.0),
-                                      child: Text(
-                                        'Hello World',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
-                                      ),
-                                    ),
-                                    CircularPercentIndicator(
-                                      percent: 0.5,
-                                      radius: MediaQuery.sizeOf(context).width *
-                                          0.075,
-                                      lineWidth: 12.0,
-                                      animation: true,
-                                      animateFromLastPercent: true,
-                                      progressColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context).accent4,
-                                      center: Text(
-                                        '%',
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineSmall,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 10.0, 0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            'Protein',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                          ),
-                                          LinearPercentIndicator(
-                                            percent: 0.5,
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.5,
-                                            lineHeight: 15.0,
-                                            animation: true,
-                                            animateFromLastPercent: true,
-                                            progressColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
-                                            backgroundColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .accent4,
-                                            center: Text(
-                                              '%',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .headlineSmall
-                                                      .override(
-                                                        fontFamily: 'Outfit',
-                                                        fontSize: 14.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                            ),
-                                            padding: EdgeInsets.zero,
-                                          ),
-                                        ]
-                                            .divide(SizedBox(width: 20.0))
-                                            .addToStart(SizedBox(width: 50.0)),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'Fats',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ),
-                                      ]
-                                          .divide(SizedBox(width: 20.0))
-                                          .addToStart(SizedBox(width: 50.0)),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'Carbs',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ),
-                                      ]
-                                          .divide(SizedBox(width: 20.0))
-                                          .addToStart(SizedBox(width: 50.0)),
-                                    ),
                                   ],
                                 ),
                               ),
@@ -618,100 +621,6 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                       ]
                                           .divide(SizedBox(width: 10.0))
                                           .addToStart(SizedBox(width: 10.0)),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 10.0, 0.0, 0.0),
-                                      child: Text(
-                                        'Hello World',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
-                                      ),
-                                    ),
-                                    CircularPercentIndicator(
-                                      percent: 0.5,
-                                      radius: MediaQuery.sizeOf(context).width *
-                                          0.075,
-                                      lineWidth: 12.0,
-                                      animation: true,
-                                      animateFromLastPercent: true,
-                                      progressColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context).accent4,
-                                      center: Text(
-                                        '%',
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineSmall,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 10.0, 0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            'Hello World',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                          ),
-                                          LinearPercentIndicator(
-                                            percent: 0.5,
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.5,
-                                            lineHeight: 15.0,
-                                            animation: true,
-                                            animateFromLastPercent: true,
-                                            progressColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
-                                            backgroundColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .accent4,
-                                            center: Text(
-                                              '%',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .headlineSmall
-                                                      .override(
-                                                        fontFamily: 'Outfit',
-                                                        fontSize: 14.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                            ),
-                                            padding: EdgeInsets.zero,
-                                          ),
-                                        ]
-                                            .divide(SizedBox(width: 20.0))
-                                            .addToStart(SizedBox(width: 50.0)),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'Hello World',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ),
-                                      ]
-                                          .divide(SizedBox(width: 20.0))
-                                          .addToStart(SizedBox(width: 50.0)),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Text(
-                                          'Hello World',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ),
-                                      ]
-                                          .divide(SizedBox(width: 20.0))
-                                          .addToStart(SizedBox(width: 50.0)),
                                     ),
                                   ],
                                 ),
@@ -864,6 +773,32 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                         ),
                                       }.withoutNulls,
                                     );
+
+                                    if (FFAppState().tabindexMacros == 'day') {
+                                      setState(() {
+                                        FFAppState().dateStart =
+                                            FFAppState().dayS;
+                                        FFAppState().dateEnd =
+                                            FFAppState().dayE;
+                                      });
+                                    } else {
+                                      if (FFAppState().tabindexMacros ==
+                                          'week') {
+                                        setState(() {
+                                          FFAppState().dateStart =
+                                              FFAppState().weekS;
+                                          FFAppState().dateEnd =
+                                              FFAppState().weekE;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          FFAppState().dateStart =
+                                              FFAppState().monthS;
+                                          FFAppState().dateEnd =
+                                              FFAppState().monthE;
+                                        });
+                                      }
+                                    }
                                   },
                                   child: Icon(
                                     Icons.arrow_forward_ios,
@@ -927,6 +862,32 @@ class _MacrosWidgetState extends State<MacrosWidget>
                                         ),
                                       }.withoutNulls,
                                     );
+
+                                    if (FFAppState().tabindexMacros == 'day') {
+                                      setState(() {
+                                        FFAppState().dateStart =
+                                            FFAppState().dayS;
+                                        FFAppState().dateEnd =
+                                            FFAppState().dayE;
+                                      });
+                                    } else {
+                                      if (FFAppState().tabindexMacros ==
+                                          'week') {
+                                        setState(() {
+                                          FFAppState().dateStart =
+                                              FFAppState().weekS;
+                                          FFAppState().dateEnd =
+                                              FFAppState().weekE;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          FFAppState().dateStart =
+                                              FFAppState().monthS;
+                                          FFAppState().dateEnd =
+                                              FFAppState().monthE;
+                                        });
+                                      }
+                                    }
                                   },
                                   child: Icon(
                                     Icons.arrow_forward_ios,
@@ -975,111 +936,54 @@ class _MacrosWidgetState extends State<MacrosWidget>
                             Expanded(
                               child: Align(
                                 alignment: AlignmentDirectional(0.90, 0.00),
-                                child: StreamBuilder<List<NutritionRecord>>(
-                                  stream: queryNutritionRecord(
-                                    queryBuilder: (nutritionRecord) =>
-                                        nutritionRecord
-                                            .where(
-                                              'current_time',
-                                              isGreaterThanOrEqualTo:
-                                                  FFAppState().dateStart,
-                                            )
-                                            .where(
-                                              'current_time',
-                                              isLessThanOrEqualTo:
-                                                  FFAppState().dateEnd,
-                                            ),
-                                    singleRecord: true,
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
-                                            ),
-                                          ),
+                                child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                      'Snack',
+                                      queryParameters: {
+                                        'mealtime': serializeParam(
+                                          'snack',
+                                          ParamType.String,
                                         ),
-                                      );
-                                    }
-                                    List<NutritionRecord>
-                                        iconNutritionRecordList =
-                                        snapshot.data!;
-                                    // Return an empty Container when the item does not exist.
-                                    if (snapshot.data!.isEmpty) {
-                                      return Container();
-                                    }
-                                    final iconNutritionRecord =
-                                        iconNutritionRecordList.isNotEmpty
-                                            ? iconNutritionRecordList.first
-                                            : null;
-                                    return InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        if (FFAppState().tabindexMacros ==
-                                            'day') {
-                                          setState(() {
-                                            FFAppState().dateStart =
-                                                FFAppState().dayS;
-                                            FFAppState().dateEnd =
-                                                FFAppState().dayE;
-                                          });
-
-                                          context.pushNamed(
-                                            'Snack',
-                                            queryParameters: {
-                                              'mealtime': serializeParam(
-                                                'snack',
-                                                ParamType.String,
-                                              ),
-                                            }.withoutNulls,
-                                          );
-                                        } else {
-                                          if (FFAppState().tabindexMacros ==
-                                              'week') {
-                                            setState(() {
-                                              FFAppState().dateStart =
-                                                  FFAppState().weekS;
-                                              FFAppState().dateEnd =
-                                                  FFAppState().weekE;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              FFAppState().dateStart =
-                                                  FFAppState().monthS;
-                                              FFAppState().dateEnd =
-                                                  FFAppState().monthE;
-                                            });
-                                          }
-
-                                          context.pushNamed(
-                                            'Snack',
-                                            queryParameters: {
-                                              'mealtime': serializeParam(
-                                                'snack',
-                                                ParamType.String,
-                                              ),
-                                            }.withoutNulls,
-                                          );
-                                        }
-                                      },
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        size: 18.0,
-                                      ),
+                                      }.withoutNulls,
                                     );
+
+                                    if (FFAppState().tabindexMacros == 'day') {
+                                      setState(() {
+                                        FFAppState().dateStart =
+                                            FFAppState().dayS;
+                                        FFAppState().dateEnd =
+                                            FFAppState().dayE;
+                                      });
+                                    } else {
+                                      if (FFAppState().tabindexMacros ==
+                                          'week') {
+                                        setState(() {
+                                          FFAppState().dateStart =
+                                              FFAppState().weekS;
+                                          FFAppState().dateEnd =
+                                              FFAppState().weekE;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          FFAppState().dateStart =
+                                              FFAppState().monthS;
+                                          FFAppState().dateEnd =
+                                              FFAppState().monthE;
+                                        });
+                                      }
+                                    }
                                   },
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    size: 18.0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -1128,20 +1032,6 @@ class _MacrosWidgetState extends State<MacrosWidget>
                     ),
                   ],
                 ),
-              ),
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30.0,
-                borderWidth: 1.0,
-                buttonSize: 60.0,
-                icon: Icon(
-                  Icons.arrow_back_rounded,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                onPressed: () async {
-                  context.pushNamed('Macros');
-                },
               ),
             ],
           ),

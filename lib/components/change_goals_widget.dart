@@ -34,12 +34,17 @@ class _ChangeGoalsWidgetState extends State<ChangeGoalsWidget> {
 
     _model.calorieFieldController ??= TextEditingController();
     _model.calorieFieldFocusNode ??= FocusNode();
+
     _model.fatFieldController ??= TextEditingController();
     _model.fatFieldFocusNode ??= FocusNode();
+
     _model.proteinFieldController ??= TextEditingController();
     _model.proteinFieldFocusNode ??= FocusNode();
+
     _model.carbFieldController ??= TextEditingController();
     _model.carbFieldFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

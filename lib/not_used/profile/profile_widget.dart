@@ -25,6 +25,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ProfileModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -361,33 +363,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     ],
                   ),
                 ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 40.0),
-            child: FFButtonWidget(
-              onPressed: () async {
-                GoRouter.of(context).prepareAuthEvent();
-                await authManager.signOut();
-                GoRouter.of(context).clearRedirectLocation();
-
-                context.goNamedAuth('SplashPage', context.mounted);
-              },
-              text: 'Log Out',
-              options: FFButtonOptions(
-                width: 110.0,
-                height: 50.0,
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                color: FlutterFlowTheme.of(context).secondaryBackground,
-                textStyle: FlutterFlowTheme.of(context).bodyLarge,
-                elevation: 3.0,
-                borderSide: BorderSide(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
               ),
             ),
           ),

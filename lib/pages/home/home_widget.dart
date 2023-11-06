@@ -1,4 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/reset_macros_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -80,6 +82,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
           !anim.applyInitialState),
       this,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -132,7 +136,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                   onPressed: () {
                     print('Button pressed ...');
                   },
-                  text: 'Button',
+                  text: 'Debug Add Macros',
                   options: FFButtonOptions(
                     height: 40.0,
                     padding:
@@ -156,10 +160,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                 child: FFButtonWidget(
-                  onPressed: () {
-                    print('Button pressed ...');
+                  onPressed: () async {
+                    context.pushNamed('testWorkouts');
                   },
-                  text: 'Button',
+                  text: 'Test Workouts',
                   options: FFButtonOptions(
                     height: 40.0,
                     padding:
@@ -216,6 +220,11 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                     GoRouter.of(context).clearRedirectLocation();
 
                     FFAppState().displayName = 'User';
+                    FFAppState().workoutDaysGoal = [];
+                    FFAppState().dayCalories = 0;
+                    FFAppState().dayFat = 0;
+                    FFAppState().dayProtein = 0;
+                    FFAppState().dayCarbs = 0;
 
                     context.pushNamedAuth('SplashPage', context.mounted);
                   },
@@ -499,11 +508,69 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                 ],
                               ),
                             ),
+                            Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 50.0, 0.0, 0.0),
+                                  child: FFButtonWidget(
+                                    onPressed: () async {
+                                      await showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.transparent,
+                                        enableDrag: false,
+                                        context: context,
+                                        builder: (context) {
+                                          return GestureDetector(
+                                            onTap: () => _model
+                                                    .unfocusNode.canRequestFocus
+                                                ? FocusScope.of(context)
+                                                    .requestFocus(
+                                                        _model.unfocusNode)
+                                                : FocusScope.of(context)
+                                                    .unfocus(),
+                                            child: Padding(
+                                              padding: MediaQuery.viewInsetsOf(
+                                                  context),
+                                              child: ResetMacrosWidget(),
+                                            ),
+                                          );
+                                        },
+                                      ).then((value) => safeSetState(() {}));
+                                    },
+                                    text: 'Reset Macros',
+                                    options: FFButtonOptions(
+                                      height: 40.0,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          24.0, 0.0, 24.0, 0.0),
+                                      iconPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            color: Colors.white,
+                                          ),
+                                      elevation: 3.0,
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                           carouselController: _model.carouselController ??=
                               CarouselController(),
                           options: CarouselOptions(
-                            initialPage: 1,
+                            initialPage: 0,
                             viewportFraction: 0.5,
                             disableCenter: false,
                             enlargeCenterPage: true,
@@ -524,7 +591,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                 child: Container(
                   width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: MediaQuery.sizeOf(context).height * 0.25,
+                  height: MediaQuery.sizeOf(context).height * 0.4,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                     boxShadow: [
@@ -535,73 +602,168 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                       )
                     ],
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(-1.00, 0.00),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                5.0, 5.0, 5.0, 5.0),
-                            child: Text(
-                              'Workouts',
-                              style:
-                                  FlutterFlowTheme.of(context).headlineMedium,
-                            ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(-1.00, 0.00),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              5.0, 5.0, 5.0, 5.0),
+                          child: Text(
+                            'Workouts',
+                            style: FlutterFlowTheme.of(context).headlineMedium,
                           ),
                         ),
-                        Builder(
-                          builder: (context) {
-                            final workoutDay =
-                                FFAppState().workoutDaysGoal.toList();
-                            return ListView.builder(
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: workoutDay.length,
-                              itemBuilder: (context, workoutDayIndex) {
-                                final workoutDayItem =
-                                    workoutDay[workoutDayIndex];
-                                return Container(
-                                  width: MediaQuery.sizeOf(context).width * 1.0,
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.1,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(-1.00, 0.00),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  5.0, 5.0, 5.0, 5.0),
-                                          child: Text(
-                                            workoutDayItem,
-                                            style: FlutterFlowTheme.of(context)
-                                                .headlineSmall
-                                                .override(
-                                                  fontFamily: 'Outfit',
-                                                  fontSize: 18.0,
-                                                ),
-                                          ),
-                                        ),
+                      ),
+                      SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Builder(
+                              builder: (context) {
+                                final workoutDay =
+                                    FFAppState().workoutDaysGoal.toList();
+                                return ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: workoutDay.length,
+                                  itemBuilder: (context, workoutDayIndex) {
+                                    final workoutDayItem =
+                                        workoutDay[workoutDayIndex];
+                                    return Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          1.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
                                       ),
-                                    ],
-                                  ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Align(
+                                            alignment: AlignmentDirectional(
+                                                -1.00, 0.00),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5.0, 5.0, 5.0, 5.0),
+                                              child: Text(
+                                                workoutDayItem,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily: 'Outfit',
+                                                          fontSize: 18.0,
+                                                        ),
+                                              ),
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: AlignmentDirectional(
+                                                -1.00, 0.00),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5.0, 5.0, 5.0, 5.0),
+                                              child: Text(
+                                                'Completed Workouts:',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
+                                              ),
+                                            ),
+                                          ),
+                                          StreamBuilder<List<WorkoutsRecord>>(
+                                            stream: queryWorkoutsRecord(
+                                              queryBuilder: (workoutsRecord) =>
+                                                  workoutsRecord
+                                                      .where(
+                                                        'displayName',
+                                                        isEqualTo: FFAppState()
+                                                            .displayName,
+                                                      )
+                                                      .where(
+                                                        'completedDays',
+                                                        arrayContains:
+                                                            workoutDayItem,
+                                                      ),
+                                            ),
+                                            builder: (context, snapshot) {
+                                              // Customize what your widget looks like when it's loading.
+                                              if (!snapshot.hasData) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width: 50.0,
+                                                    height: 50.0,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                              Color>(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primary,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              List<WorkoutsRecord>
+                                                  listViewWorkoutsRecordList =
+                                                  snapshot.data!;
+                                              return ListView.builder(
+                                                padding: EdgeInsets.zero,
+                                                shrinkWrap: true,
+                                                scrollDirection: Axis.vertical,
+                                                itemCount:
+                                                    listViewWorkoutsRecordList
+                                                        .length,
+                                                itemBuilder:
+                                                    (context, listViewIndex) {
+                                                  final listViewWorkoutsRecord =
+                                                      listViewWorkoutsRecordList[
+                                                          listViewIndex];
+                                                  return Card(
+                                                    clipBehavior: Clip
+                                                        .antiAliasWithSaveLayer,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryBackground,
+                                                    elevation: 4.0,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
+                                                    ),
+                                                    child: Text(
+                                                      valueOrDefault<String>(
+                                                        '${listViewWorkoutsRecord.name} | Reps: ${listViewWorkoutsRecord.reps.toString()} | Weight: ${listViewWorkoutsRecord.weight.toString()}',
+                                                        'No completed workouts, go to workouts to get started.',
+                                                      ),
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 );
                               },
-                            );
-                          },
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

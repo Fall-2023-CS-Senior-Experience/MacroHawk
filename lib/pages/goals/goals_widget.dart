@@ -30,6 +30,8 @@ class _GoalsWidgetState extends State<GoalsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => GoalsModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

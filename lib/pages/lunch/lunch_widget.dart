@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/macrospop_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -6,7 +7,10 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -35,10 +39,36 @@ class _LunchWidgetState extends State<LunchWidget> {
     super.initState();
     _model = createModel(context, () => LunchModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.snackquery = await queryNutritionRecordOnce(
+        queryBuilder: (nutritionRecord) => nutritionRecord
+            .where(
+              'mealtime',
+              isEqualTo: widget.mealtime,
+            )
+            .where(
+              'current_time',
+              isGreaterThanOrEqualTo: FFAppState().dateStart,
+            )
+            .where(
+              'current_time',
+              isLessThanOrEqualTo: FFAppState().dateEnd,
+            ),
+      );
+      setState(() {
+        _model.snackListname =
+            _model.snackquery!.toList().cast<NutritionRecord>();
+      });
+    });
+
     _model.foodinputController ??= TextEditingController(text: 'orange');
     _model.foodinputFocusNode ??= FocusNode();
+
     _model.textFieldBrandController ??= TextEditingController();
     _model.textFieldBrandFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -108,55 +138,23 @@ class _LunchWidgetState extends State<LunchWidget> {
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
-                child: StreamBuilder<List<NutritionRecord>>(
-                  stream: queryNutritionRecord(
-                    queryBuilder: (nutritionRecord) => nutritionRecord.where(
-                      'mealtime',
-                      isEqualTo: widget.mealtime,
-                    ),
-                  ),
-                  builder: (context, snapshot) {
-                    // Customize what your widget looks like when it's loading.
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: SizedBox(
-                          width: 50.0,
-                          height: 50.0,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              FlutterFlowTheme.of(context).primary,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                    List<NutritionRecord> listViewNutritionRecordList =
-                        snapshot.data!;
+                child: Builder(
+                  builder: (context) {
+                    final snacklist = _model.snackListname.toList();
                     return ListView.builder(
                       padding: EdgeInsets.zero,
                       scrollDirection: Axis.vertical,
-                      itemCount: listViewNutritionRecordList.length,
-                      itemBuilder: (context, listViewIndex) {
-                        final listViewNutritionRecord =
-                            listViewNutritionRecordList[listViewIndex];
+                      itemCount: snacklist.length,
+                      itemBuilder: (context, snacklistIndex) {
+                        final snacklistItem = snacklist[snacklistIndex];
                         return Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/482/600',
-                                width: MediaQuery.sizeOf(context).width * 0.15,
-                                height:
-                                    MediaQuery.sizeOf(context).height * 0.05,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   5.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                listViewNutritionRecord.name,
+                                snacklistItem.name,
                                 style: FlutterFlowTheme.of(context).bodyMedium,
                               ),
                             ),
@@ -175,7 +173,7 @@ class _LunchWidgetState extends State<LunchWidget> {
                                             .bodyMedium,
                                       ),
                                       Text(
-                                        listViewNutritionRecord.calories,
+                                        snacklistItem.calories,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                       ),
@@ -195,7 +193,7 @@ class _LunchWidgetState extends State<LunchWidget> {
                                             .bodyMedium,
                                       ),
                                       Text(
-                                        listViewNutritionRecord.proteins,
+                                        snacklistItem.proteins,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                       ),
@@ -215,7 +213,7 @@ class _LunchWidgetState extends State<LunchWidget> {
                                             .bodyMedium,
                                       ),
                                       Text(
-                                        listViewNutritionRecord.fats,
+                                        snacklistItem.fats,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                       ),
@@ -235,7 +233,7 @@ class _LunchWidgetState extends State<LunchWidget> {
                                             .bodyMedium,
                                       ),
                                       Text(
-                                        listViewNutritionRecord.carbs,
+                                        snacklistItem.carbs,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                       ),
@@ -376,62 +374,54 @@ class _LunchWidgetState extends State<LunchWidget> {
                 isSearchable: false,
                 isMultiSelect: false,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(100.0, 20.0, 0.0, 0.0),
-                    child: FFButtonWidget(
-                      onPressed: () async {
-                        await showModalBottomSheet(
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          enableDrag: false,
-                          context: context,
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () => _model.unfocusNode.canRequestFocus
-                                  ? FocusScope.of(context)
-                                      .requestFocus(_model.unfocusNode)
-                                  : FocusScope.of(context).unfocus(),
-                              child: Padding(
-                                padding: MediaQuery.viewInsetsOf(context),
-                                child: MacrospopWidget(
-                                  callname: _model.foodinputController.text,
-                                  callbrand:
-                                      _model.textFieldBrandController.text,
-                                  calltype: _model.dropDownCatValue!,
-                                  mealtime: widget.mealtime!,
-                                ),
-                              ),
-                            );
-                          },
-                        ).then((value) => safeSetState(() {}));
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 0.0, 0.0),
+                child: FFButtonWidget(
+                  onPressed: () async {
+                    await showModalBottomSheet(
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      enableDrag: false,
+                      context: context,
+                      builder: (context) {
+                        return GestureDetector(
+                          onTap: () => _model.unfocusNode.canRequestFocus
+                              ? FocusScope.of(context)
+                                  .requestFocus(_model.unfocusNode)
+                              : FocusScope.of(context).unfocus(),
+                          child: Padding(
+                            padding: MediaQuery.viewInsetsOf(context),
+                            child: MacrospopWidget(
+                              callbrand: _model.textFieldBrandController.text,
+                              calltype: _model.dropDownCatValue!,
+                              callname: _model.foodinputController.text,
+                              mealtime: widget.mealtime!,
+                            ),
+                          ),
+                        );
                       },
-                      text: 'Lookup Food',
-                      options: FFButtonOptions(
-                        height: 40.0,
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            24.0, 0.0, 24.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: FlutterFlowTheme.of(context).primary,
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.white,
-                                ),
-                        elevation: 3.0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
+                    ).then((value) => safeSetState(() {}));
+                  },
+                  text: 'Lookup Food',
+                  options: FFButtonOptions(
+                    height: 40.0,
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: FlutterFlowTheme.of(context).primary,
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Readex Pro',
+                          color: Colors.white,
                         ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                    elevation: 3.0,
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1.0,
                     ),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                ],
+                ),
               ),
             ],
           ),

@@ -140,6 +140,8 @@ class _SplashPageWidgetState extends State<SplashPageWidget>
         return;
       }
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

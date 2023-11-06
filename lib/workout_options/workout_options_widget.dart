@@ -26,6 +26,8 @@ class _WorkoutOptionsWidgetState extends State<WorkoutOptionsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => WorkoutOptionsModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

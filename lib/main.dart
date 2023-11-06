@@ -136,7 +136,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'Macros': MacrosWidget(),
       'Home': HomeWidget(),
-      'WorkoutPlans': WorkoutPlansWidget(),
+      'testWorkouts': TestWorkoutsWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -150,7 +150,7 @@ class _NavBarPageState extends State<NavBarPage> {
         }),
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         selectedItemColor: FlutterFlowTheme.of(context).primary,
-        unselectedItemColor: Color(0x8A000000),
+        unselectedItemColor: FlutterFlowTheme.of(context).primaryText,
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
@@ -173,7 +173,8 @@ class _NavBarPageState extends State<NavBarPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.fitness_center,
+              Icons.fitness_center_rounded,
+              size: 24.0,
             ),
             label: 'Workouts',
             tooltip: '',

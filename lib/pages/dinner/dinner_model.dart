@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/macrospop_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -7,7 +8,10 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'dinner_widget.dart' show DinnerWidget;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +23,23 @@ class DinnerModel extends FlutterFlowModel<DinnerWidget> {
 
   DateTime? dinnerEnd;
 
+  List<NutritionRecord> snackListname = [];
+  void addToSnackListname(NutritionRecord item) => snackListname.add(item);
+  void removeFromSnackListname(NutritionRecord item) =>
+      snackListname.remove(item);
+  void removeAtIndexFromSnackListname(int index) =>
+      snackListname.removeAt(index);
+  void insertAtIndexInSnackListname(int index, NutritionRecord item) =>
+      snackListname.insert(index, item);
+  void updateSnackListnameAtIndex(
+          int index, Function(NutritionRecord) updateFn) =>
+      snackListname[index] = updateFn(snackListname[index]);
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  // Stores action output result for [Firestore Query - Query a collection] action in Dinner widget.
+  List<NutritionRecord>? snackquery;
   // State field(s) for foodinput widget.
   FocusNode? foodinputFocusNode;
   TextEditingController? foodinputController;

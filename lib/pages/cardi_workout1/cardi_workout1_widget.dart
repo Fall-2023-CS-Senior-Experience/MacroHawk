@@ -25,6 +25,8 @@ class _CardiWorkout1WidgetState extends State<CardiWorkout1Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CardiWorkout1Model());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

@@ -30,6 +30,8 @@ class _WorkoutSelectWidgetState extends State<WorkoutSelectWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => WorkoutSelectModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
