@@ -2,6 +2,7 @@ import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/reset_macros_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -113,18 +114,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            scaffoldKey.currentState!.openDrawer();
-          },
-          backgroundColor: FlutterFlowTheme.of(context).primary,
-          elevation: 8.0,
-          child: Icon(
-            Icons.add,
-            color: FlutterFlowTheme.of(context).info,
-            size: 24.0,
-          ),
-        ),
         drawer: Drawer(
           elevation: 16.0,
           child: Column(
@@ -277,7 +266,45 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
               ).animateOnPageLoad(animationsMap['textOnPageLoadAnimation2']!),
             ],
           ),
-          actions: [],
+          actions: [
+            FlutterFlowIconButton(
+              borderColor: FlutterFlowTheme.of(context).primary,
+              borderRadius: 20.0,
+              borderWidth: 1.0,
+              buttonSize: 40.0,
+              fillColor: FlutterFlowTheme.of(context).accent1,
+              icon: Icon(
+                Icons.bug_report_outlined,
+                color: FlutterFlowTheme.of(context).primaryText,
+                size: 24.0,
+              ),
+              onPressed: () async {
+                var confirmDialogResponse = await showDialog<bool>(
+                      context: context,
+                      builder: (alertDialogContext) {
+                        return AlertDialog(
+                          title: Text('Debug'),
+                          content: Text(
+                              'This opens the debug menu which is intended to be used for testing and reseting your application. Do you wish to continue?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () =>
+                                  Navigator.pop(alertDialogContext, false),
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () =>
+                                  Navigator.pop(alertDialogContext, true),
+                              child: Text('Continue'),
+                            ),
+                          ],
+                        );
+                      },
+                    ) ??
+                    false;
+              },
+            ),
+          ],
           centerTitle: false,
           elevation: 0.0,
         ),
