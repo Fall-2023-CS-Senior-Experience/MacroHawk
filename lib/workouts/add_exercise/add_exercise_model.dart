@@ -26,14 +26,6 @@ class AddExerciseModel extends FlutterFlowModel<AddExerciseWidget> {
   FocusNode? nameFocusNode;
   TextEditingController? nameController;
   String? Function(BuildContext, String?)? nameControllerValidator;
-  String? _nameControllerValidator(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Field is required';
-    }
-
-    return null;
-  }
-
   // State field(s) for desc widget.
   FocusNode? descFocusNode;
   TextEditingController? descController;
@@ -42,37 +34,17 @@ class AddExerciseModel extends FlutterFlowModel<AddExerciseWidget> {
   FocusNode? repsFocusNode;
   TextEditingController? repsController;
   String? Function(BuildContext, String?)? repsControllerValidator;
-  String? _repsControllerValidator(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Field is required';
-    }
-
-    return null;
-  }
-
   // State field(s) for weight widget.
   FocusNode? weightFocusNode;
   TextEditingController? weightController;
   String? Function(BuildContext, String?)? weightControllerValidator;
-  String? _weightControllerValidator(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Field is required';
-    }
-
-    return null;
-  }
-
   // State field(s) for CheckboxGroup widget.
   List<String>? checkboxGroupValues;
   FormFieldController<List<String>>? checkboxGroupValueController;
 
   /// Initialization and disposal methods.
 
-  void initState(BuildContext context) {
-    nameControllerValidator = _nameControllerValidator;
-    repsControllerValidator = _repsControllerValidator;
-    weightControllerValidator = _weightControllerValidator;
-  }
+  void initState(BuildContext context) {}
 
   void dispose() {
     unfocusNode.dispose();

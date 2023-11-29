@@ -88,7 +88,7 @@ class _AddExerciseWidgetState extends State<AddExerciseWidget> {
               size: 30.0,
             ),
             onPressed: () async {
-              context.pop();
+              context.pushNamed('testWorkouts');
             },
           ),
           title: Text(
@@ -382,9 +382,6 @@ class _AddExerciseWidgetState extends State<AddExerciseWidget> {
                           !_model.formKey.currentState!.validate()) {
                         return;
                       }
-                      if (_model.categoryValue == null) {
-                        return;
-                      }
 
                       await WorkoutsRecord.collection.doc().set({
                         ...createWorkoutsRecordData(
@@ -394,6 +391,7 @@ class _AddExerciseWidgetState extends State<AddExerciseWidget> {
                           weight: int.tryParse(_model.weightController.text),
                           category: _model.categoryValue,
                           displayName: FFAppState().displayName,
+                          username: FFAppState().username,
                         ),
                         ...mapToFirestore(
                           {

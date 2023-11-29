@@ -29,11 +29,18 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /users/{parent}/nutritions/{document} {
+    match /users_names/{document} {
       allow create: if true;
       allow read: if true;
-      allow write: if true;
-      allow delete: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /users_names/{parent}/nutritions/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
     }
 
     match /{path=**}/nutritions/{document} {

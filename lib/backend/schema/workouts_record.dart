@@ -56,6 +56,11 @@ class WorkoutsRecord extends FirestoreRecord {
   List<String> get plannedDays => _plannedDays ?? const [];
   bool hasPlannedDays() => _plannedDays != null;
 
+  // "username" field.
+  String? _username;
+  String get username => _username ?? '';
+  bool hasUsername() => _username != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _desc = snapshotData['desc'] as String?;
@@ -65,6 +70,7 @@ class WorkoutsRecord extends FirestoreRecord {
     _completedDays = getDataList(snapshotData['completedDays']);
     _displayName = snapshotData['displayName'] as String?;
     _plannedDays = getDataList(snapshotData['plannedDays']);
+    _username = snapshotData['username'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -108,6 +114,7 @@ Map<String, dynamic> createWorkoutsRecordData({
   int? weight,
   String? category,
   String? displayName,
+  String? username,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -117,6 +124,7 @@ Map<String, dynamic> createWorkoutsRecordData({
       'weight': weight,
       'category': category,
       'displayName': displayName,
+      'username': username,
     }.withoutNulls,
   );
 
@@ -136,7 +144,8 @@ class WorkoutsRecordDocumentEquality implements Equality<WorkoutsRecord> {
         e1?.category == e2?.category &&
         listEquality.equals(e1?.completedDays, e2?.completedDays) &&
         e1?.displayName == e2?.displayName &&
-        listEquality.equals(e1?.plannedDays, e2?.plannedDays);
+        listEquality.equals(e1?.plannedDays, e2?.plannedDays) &&
+        e1?.username == e2?.username;
   }
 
   @override
@@ -148,7 +157,8 @@ class WorkoutsRecordDocumentEquality implements Equality<WorkoutsRecord> {
         e?.category,
         e?.completedDays,
         e?.displayName,
-        e?.plannedDays
+        e?.plannedDays,
+        e?.username
       ]);
 
   @override

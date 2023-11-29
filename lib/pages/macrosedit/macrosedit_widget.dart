@@ -1,0 +1,1246 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/calender_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
+import 'macrosedit_model.dart';
+export 'macrosedit_model.dart';
+
+class MacroseditWidget extends StatefulWidget {
+  const MacroseditWidget({
+    Key? key,
+    this.dquery,
+    this.wkquery,
+    this.mquery,
+  }) : super(key: key);
+
+  final List<NutritionsRecord>? dquery;
+  final List<NutritionsRecord>? wkquery;
+  final List<NutritionsRecord>? mquery;
+
+  @override
+  _MacroseditWidgetState createState() => _MacroseditWidgetState();
+}
+
+class _MacroseditWidgetState extends State<MacroseditWidget>
+    with TickerProviderStateMixin {
+  late MacroseditModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => MacroseditModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.checkuserId = await queryUsersNamesRecordOnce(
+        queryBuilder: (usersNamesRecord) => usersNamesRecord.where(
+          'username',
+          isEqualTo: FFAppState().username,
+        ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      setState(() {
+        FFAppState().userIdRef = _model.checkuserId?.reference;
+      });
+      _model.resultD = await queryNutritionsRecordOnce(
+        parent: FFAppState().userIdRef,
+        queryBuilder: (nutritionsRecord) => nutritionsRecord
+            .where(
+              'current_time',
+              isGreaterThanOrEqualTo: FFAppState().dayS,
+            )
+            .where(
+              'current_time',
+              isLessThanOrEqualTo: FFAppState().dayE,
+            ),
+      );
+      _model.resultW = await queryNutritionsRecordOnce(
+        parent: FFAppState().userIdRef,
+        queryBuilder: (nutritionsRecord) => nutritionsRecord
+            .where(
+              'current_time',
+              isGreaterThanOrEqualTo: FFAppState().weekS,
+            )
+            .where(
+              'current_time',
+              isLessThanOrEqualTo: FFAppState().weekE,
+            ),
+      );
+      _model.resultM = await queryNutritionsRecordOnce(
+        parent: FFAppState().userIdRef,
+        queryBuilder: (nutritionsRecord) => nutritionsRecord
+            .where(
+              'current_time',
+              isGreaterThanOrEqualTo: FFAppState().monthS,
+            )
+            .where(
+              'current_time',
+              isLessThanOrEqualTo: FFAppState().monthE,
+            ),
+      );
+      setState(() {
+        FFAppState().kalDay =
+            functions.kcalSum(_model.resultD?.toList())! / 1000;
+        FFAppState().fatD = functions.fatSum(_model.resultD?.toList())!;
+        FFAppState().carbD = functions.carbSum(_model.resultD?.toList())!;
+        FFAppState().proteinD = functions.proteinSum(_model.resultD?.toList())!;
+        FFAppState().kcalW =
+            functions.kcalSum(_model.resultW?.toList())! / 1000;
+        FFAppState().fatW = functions.fatSum(_model.resultW?.toList())!;
+        FFAppState().proteinW = functions.proteinSum(_model.resultW?.toList())!;
+        FFAppState().carbW = functions.carbSum(_model.resultW?.toList())!;
+        FFAppState().kalM = functions.kcalSum(_model.resultM?.toList())! / 1000;
+        FFAppState().proteinM = functions.proteinSum(_model.resultM?.toList())!;
+        FFAppState().fatM = functions.fatSum(_model.resultM?.toList())!;
+        FFAppState().carbM = functions.carbSum(_model.resultM?.toList())!;
+      });
+    });
+
+    _model.tabBarController = TabController(
+      vsync: this,
+      length: 3,
+      initialIndex: 0,
+    )..addListener(() => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isiOS) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarBrightness: Theme.of(context).brightness,
+          systemStatusBarContrastEnforced: true,
+        ),
+      );
+    }
+
+    context.watch<FFAppState>();
+
+    return GestureDetector(
+      onTap: () => _model.unfocusNode.canRequestFocus
+          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+          : FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          automaticallyImplyLeading: true,
+          leading: FlutterFlowIconButton(
+            borderColor: FlutterFlowTheme.of(context).primary,
+            borderRadius: 20.0,
+            borderWidth: 1.0,
+            buttonSize: 40.0,
+            fillColor: FlutterFlowTheme.of(context).accent1,
+            icon: Icon(
+              Icons.arrow_back,
+              color: FlutterFlowTheme.of(context).primaryBtnText,
+              size: 30.0,
+            ),
+            onPressed: () async {
+              context.pushNamed('Home');
+            },
+          ),
+          title: Align(
+            alignment: AlignmentDirectional(0.00, 0.00),
+            child: Text(
+              'Macros',
+              style: FlutterFlowTheme.of(context).titleMedium,
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+              child: InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  context.pushNamed('Profile');
+                },
+                child: Container(
+                  width: 100.0,
+                  height: 100.0,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.network(
+                    'https://picsum.photos/seed/671/600',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+          ],
+          centerTitle: true,
+          elevation: 4.0,
+        ),
+        body: SafeArea(
+          top: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: MediaQuery.sizeOf(context).height * 0.35,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                  ),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment(0.0, 0),
+                        child: TabBar(
+                          labelColor: FlutterFlowTheme.of(context).primaryText,
+                          unselectedLabelColor:
+                              FlutterFlowTheme.of(context).secondaryText,
+                          labelStyle: FlutterFlowTheme.of(context).titleMedium,
+                          unselectedLabelStyle: TextStyle(),
+                          indicatorColor: FlutterFlowTheme.of(context).primary,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              4.0, 4.0, 4.0, 4.0),
+                          tabs: [
+                            Tab(
+                              text: 'Day',
+                            ),
+                            Tab(
+                              text: 'Week',
+                            ),
+                            Tab(
+                              text: 'Month',
+                            ),
+                          ],
+                          controller: _model.tabBarController,
+                        ),
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          controller: _model.tabBarController,
+                          children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    FlutterFlowIconButton(
+                                      borderColor: Color(0xCC090808),
+                                      borderRadius: 20.0,
+                                      borderWidth: 1.0,
+                                      buttonSize: 40.0,
+                                      fillColor: Color(0xFFEAEF39),
+                                      icon: Icon(
+                                        Icons.date_range,
+                                        color: Color(0xCC090808),
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          FFAppState().tab = 'day';
+                                        });
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          enableDrag: false,
+                                          context: context,
+                                          builder: (context) {
+                                            return GestureDetector(
+                                              onTap: () => _model.unfocusNode
+                                                      .canRequestFocus
+                                                  ? FocusScope.of(context)
+                                                      .requestFocus(
+                                                          _model.unfocusNode)
+                                                  : FocusScope.of(context)
+                                                      .unfocus(),
+                                              child: Padding(
+                                                padding:
+                                                    MediaQuery.viewInsetsOf(
+                                                        context),
+                                                child: CalenderWidget(
+                                                  tab: FFAppState().tab,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ).then((value) => safeSetState(() {}));
+                                      },
+                                    ),
+                                    Text(
+                                      dateTimeFormat(
+                                          'yMMMd', FFAppState().dayS),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    Text(
+                                      'test 1',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 10.0))
+                                      .addToStart(SizedBox(width: 10.0)),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 0.0),
+                                  child: Text(
+                                    'Calories',
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                ),
+                                CircularPercentIndicator(
+                                  percent: 0.5,
+                                  radius:
+                                      MediaQuery.sizeOf(context).width * 0.125,
+                                  lineWidth: 12.0,
+                                  animation: true,
+                                  animateFromLastPercent: true,
+                                  progressColor:
+                                      FlutterFlowTheme.of(context).primary,
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).accent4,
+                                  center: Text(
+                                    '${formatNumber(
+                                      FFAppState().kalDay,
+                                      formatType: FormatType.decimal,
+                                      decimalType: DecimalType.periodDecimal,
+                                    )}/${FFAppState().calorieGoal.toString()}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .headlineSmall
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 0.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'Protein',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                      ),
+                                      Expanded(
+                                        child: LinearPercentIndicator(
+                                          percent: 0.5,
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.5,
+                                          lineHeight: 15.0,
+                                          animation: true,
+                                          animateFromLastPercent: true,
+                                          progressColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
+                                          backgroundColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .accent4,
+                                          center: Text(
+                                            '${formatNumber(
+                                              FFAppState().proteinD,
+                                              formatType: FormatType.decimal,
+                                              decimalType:
+                                                  DecimalType.periodDecimal,
+                                            )}/${FFAppState().proteinGoal.toString()}',
+                                            style: FlutterFlowTheme.of(context)
+                                                .headlineSmall
+                                                .override(
+                                                  fontFamily: 'Outfit',
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                      ),
+                                    ]
+                                        .divide(SizedBox(width: 20.0))
+                                        .addToStart(SizedBox(width: 50.0)),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Fat',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    Expanded(
+                                      child: LinearPercentIndicator(
+                                        percent: 0.5,
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.5,
+                                        lineHeight: 15.0,
+                                        animation: true,
+                                        animateFromLastPercent: true,
+                                        progressColor:
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context)
+                                                .accent4,
+                                        center: Text(
+                                          '${formatNumber(
+                                            FFAppState().fatD,
+                                            formatType: FormatType.decimal,
+                                            decimalType:
+                                                DecimalType.periodDecimal,
+                                          )}/${FFAppState().fatGoal.toString()}',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineSmall
+                                              .override(
+                                                fontFamily: 'Outfit',
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 20.0))
+                                      .addToStart(SizedBox(width: 50.0)),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Carbs',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    LinearPercentIndicator(
+                                      percent: 0.5,
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.5,
+                                      lineHeight: 15.0,
+                                      animation: true,
+                                      animateFromLastPercent: true,
+                                      progressColor:
+                                          FlutterFlowTheme.of(context).primary,
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context).accent4,
+                                      center: Text(
+                                        '${formatNumber(
+                                          FFAppState().carbD,
+                                          formatType: FormatType.decimal,
+                                          decimalType:
+                                              DecimalType.periodDecimal,
+                                        )}/${FFAppState().carbGoal.toString()}',
+                                        style: FlutterFlowTheme.of(context)
+                                            .headlineSmall
+                                            .override(
+                                              fontFamily: 'Outfit',
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 20.0))
+                                      .addToStart(SizedBox(width: 50.0)),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    FlutterFlowIconButton(
+                                      borderColor: Color(0xCC090808),
+                                      borderRadius: 20.0,
+                                      borderWidth: 1.0,
+                                      buttonSize: 40.0,
+                                      fillColor: Color(0xFFEAEF39),
+                                      icon: Icon(
+                                        Icons.date_range,
+                                        color: Color(0xCC090808),
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          FFAppState().tab = 'week';
+                                        });
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          enableDrag: false,
+                                          context: context,
+                                          builder: (context) {
+                                            return GestureDetector(
+                                              onTap: () => _model.unfocusNode
+                                                      .canRequestFocus
+                                                  ? FocusScope.of(context)
+                                                      .requestFocus(
+                                                          _model.unfocusNode)
+                                                  : FocusScope.of(context)
+                                                      .unfocus(),
+                                              child: Padding(
+                                                padding:
+                                                    MediaQuery.viewInsetsOf(
+                                                        context),
+                                                child: CalenderWidget(
+                                                  tab: FFAppState().tab,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ).then((value) => safeSetState(() {}));
+                                      },
+                                    ),
+                                    Text(
+                                      valueOrDefault<String>(
+                                        dateTimeFormat(
+                                            'yMMMd', FFAppState().weekS),
+                                        'date',
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    Text(
+                                      valueOrDefault<String>(
+                                        dateTimeFormat(
+                                            'yMMMd', FFAppState().weekE),
+                                        'date',
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 10.0))
+                                      .addToStart(SizedBox(width: 10.0)),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 0.0),
+                                  child: Text(
+                                    'Calories',
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                ),
+                                CircularPercentIndicator(
+                                  percent: 0.5,
+                                  radius:
+                                      MediaQuery.sizeOf(context).width * 0.125,
+                                  lineWidth: 12.0,
+                                  animation: true,
+                                  animateFromLastPercent: true,
+                                  progressColor:
+                                      FlutterFlowTheme.of(context).primary,
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).accent4,
+                                  center: Text(
+                                    '${formatNumber(
+                                      FFAppState().kcalW,
+                                      formatType: FormatType.decimal,
+                                      decimalType: DecimalType.periodDecimal,
+                                    )}/${FFAppState().calorieGoal.toString()}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .headlineSmall
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 0.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'Protein',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                      ),
+                                      Expanded(
+                                        child: LinearPercentIndicator(
+                                          percent: 0.5,
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.5,
+                                          lineHeight: 15.0,
+                                          animation: true,
+                                          animateFromLastPercent: true,
+                                          progressColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
+                                          backgroundColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .accent4,
+                                          center: Text(
+                                            '${formatNumber(
+                                              FFAppState().proteinW,
+                                              formatType: FormatType.decimal,
+                                              decimalType:
+                                                  DecimalType.periodDecimal,
+                                            )}/${FFAppState().proteinGoal.toString()}',
+                                            style: FlutterFlowTheme.of(context)
+                                                .headlineSmall
+                                                .override(
+                                                  fontFamily: 'Outfit',
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                      ),
+                                    ]
+                                        .divide(SizedBox(width: 20.0))
+                                        .addToStart(SizedBox(width: 50.0)),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Fat',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    Expanded(
+                                      child: LinearPercentIndicator(
+                                        percent: 0.5,
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.5,
+                                        lineHeight: 15.0,
+                                        animation: true,
+                                        animateFromLastPercent: true,
+                                        progressColor:
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context)
+                                                .accent4,
+                                        center: Text(
+                                          '${formatNumber(
+                                            FFAppState().fatM,
+                                            formatType: FormatType.decimal,
+                                            decimalType:
+                                                DecimalType.periodDecimal,
+                                          )}/${FFAppState().fatGoal.toString()}',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineSmall
+                                              .override(
+                                                fontFamily: 'Outfit',
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 20.0))
+                                      .addToStart(SizedBox(width: 50.0)),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Carbs',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    LinearPercentIndicator(
+                                      percent: 0.5,
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.5,
+                                      lineHeight: 15.0,
+                                      animation: true,
+                                      animateFromLastPercent: true,
+                                      progressColor:
+                                          FlutterFlowTheme.of(context).primary,
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context).accent4,
+                                      center: Text(
+                                        '${formatNumber(
+                                          FFAppState().carbW,
+                                          formatType: FormatType.decimal,
+                                          decimalType:
+                                              DecimalType.periodDecimal,
+                                        )}/${FFAppState().carbGoal.toString()}',
+                                        style: FlutterFlowTheme.of(context)
+                                            .headlineSmall
+                                            .override(
+                                              fontFamily: 'Outfit',
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 20.0))
+                                      .addToStart(SizedBox(width: 50.0)),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    FlutterFlowIconButton(
+                                      borderColor: Color(0xCC090808),
+                                      borderRadius: 20.0,
+                                      borderWidth: 1.0,
+                                      buttonSize: 40.0,
+                                      fillColor: Color(0xFFEAEF39),
+                                      icon: Icon(
+                                        Icons.date_range,
+                                        color: Color(0xCC090808),
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          FFAppState().tab = 'month';
+                                        });
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          enableDrag: false,
+                                          context: context,
+                                          builder: (context) {
+                                            return GestureDetector(
+                                              onTap: () => _model.unfocusNode
+                                                      .canRequestFocus
+                                                  ? FocusScope.of(context)
+                                                      .requestFocus(
+                                                          _model.unfocusNode)
+                                                  : FocusScope.of(context)
+                                                      .unfocus(),
+                                              child: Padding(
+                                                padding:
+                                                    MediaQuery.viewInsetsOf(
+                                                        context),
+                                                child: CalenderWidget(
+                                                  tab: FFAppState().tab,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ).then((value) => safeSetState(() {}));
+                                      },
+                                    ),
+                                    Text(
+                                      dateTimeFormat(
+                                          'yMMMd', FFAppState().monthS),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    Text(
+                                      valueOrDefault<String>(
+                                        dateTimeFormat(
+                                            'yMMMd', FFAppState().monthE),
+                                        'date',
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 10.0))
+                                      .addToStart(SizedBox(width: 10.0)),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 0.0),
+                                  child: Text(
+                                    'Calories',
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                ),
+                                CircularPercentIndicator(
+                                  percent: FFAppState().kalDay /
+                                      FFAppState().calorieGoal,
+                                  radius:
+                                      MediaQuery.sizeOf(context).width * 0.125,
+                                  lineWidth: 12.0,
+                                  animation: true,
+                                  animateFromLastPercent: true,
+                                  progressColor:
+                                      FlutterFlowTheme.of(context).primary,
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).accent4,
+                                  center: Text(
+                                    '${formatNumber(
+                                      FFAppState().kalM,
+                                      formatType: FormatType.decimal,
+                                      decimalType: DecimalType.periodDecimal,
+                                    )}/${FFAppState().calorieGoal.toString()}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .headlineSmall
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 0.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'Protein',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                      ),
+                                      Expanded(
+                                        child: LinearPercentIndicator(
+                                          percent: 0.5,
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.5,
+                                          lineHeight: 15.0,
+                                          animation: true,
+                                          animateFromLastPercent: true,
+                                          progressColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
+                                          backgroundColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .accent4,
+                                          center: Text(
+                                            '${formatNumber(
+                                              FFAppState().proteinM,
+                                              formatType: FormatType.decimal,
+                                              decimalType:
+                                                  DecimalType.periodDecimal,
+                                            )}/${FFAppState().proteinGoal.toString()}',
+                                            style: FlutterFlowTheme.of(context)
+                                                .headlineSmall
+                                                .override(
+                                                  fontFamily: 'Outfit',
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                          padding: EdgeInsets.zero,
+                                        ),
+                                      ),
+                                    ]
+                                        .divide(SizedBox(width: 20.0))
+                                        .addToStart(SizedBox(width: 50.0)),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Fat',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    Expanded(
+                                      child: LinearPercentIndicator(
+                                        percent: 0.5,
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.5,
+                                        lineHeight: 15.0,
+                                        animation: true,
+                                        animateFromLastPercent: true,
+                                        progressColor:
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context)
+                                                .accent4,
+                                        center: Text(
+                                          '${formatNumber(
+                                            FFAppState().fatM,
+                                            formatType: FormatType.decimal,
+                                            decimalType:
+                                                DecimalType.periodDecimal,
+                                          )}/${FFAppState().fatGoal.toString()}',
+                                          style: FlutterFlowTheme.of(context)
+                                              .headlineSmall
+                                              .override(
+                                                fontFamily: 'Outfit',
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 20.0))
+                                      .addToStart(SizedBox(width: 50.0)),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Carbs',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                    LinearPercentIndicator(
+                                      percent: 0.5,
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.5,
+                                      lineHeight: 15.0,
+                                      animation: true,
+                                      animateFromLastPercent: true,
+                                      progressColor:
+                                          FlutterFlowTheme.of(context).primary,
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context).accent4,
+                                      center: Text(
+                                        '${formatNumber(
+                                          FFAppState().carbM,
+                                          formatType: FormatType.decimal,
+                                          decimalType:
+                                              DecimalType.periodDecimal,
+                                        )}/${FFAppState().carbGoal.toString()}',
+                                        style: FlutterFlowTheme.of(context)
+                                            .headlineSmall
+                                            .override(
+                                              fontFamily: 'Outfit',
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                  ]
+                                      .divide(SizedBox(width: 20.0))
+                                      .addToStart(SizedBox(width: 50.0)),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 60.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      alignment: AlignmentDirectional(0.00, 0.00),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Icon(
+                              Icons.local_dining_rounded,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              size: 24.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 0.0, 0.0),
+                              child: Text(
+                                'Breakfast',
+                                style: FlutterFlowTheme.of(context).labelMedium,
+                              ),
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: AlignmentDirectional(0.90, 0.00),
+                                child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                      'Breakfast',
+                                      queryParameters: {
+                                        'mealtime': serializeParam(
+                                          'breakfast',
+                                          ParamType.String,
+                                        ),
+                                        'tab': serializeParam(
+                                          _model.tabBarCurrentIndex,
+                                          ParamType.int,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ].divide(SizedBox(width: 10.0)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 60.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      alignment: AlignmentDirectional(0.00, 0.00),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Icon(
+                              Icons.grain_rounded,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              size: 24.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 0.0, 0.0),
+                              child: Text(
+                                'Lunch',
+                                style: FlutterFlowTheme.of(context).labelMedium,
+                              ),
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: AlignmentDirectional(0.90, 0.00),
+                                child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                      'Lunch',
+                                      queryParameters: {
+                                        'mealtime': serializeParam(
+                                          'lunch',
+                                          ParamType.String,
+                                        ),
+                                        'tab': serializeParam(
+                                          _model.tabBarCurrentIndex,
+                                          ParamType.int,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ].divide(SizedBox(width: 10.0)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 60.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      alignment: AlignmentDirectional(0.00, 0.00),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Icon(
+                              Icons.local_fire_department_rounded,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              size: 24.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 0.0, 0.0),
+                              child: Text(
+                                'Dinner',
+                                style: FlutterFlowTheme.of(context).labelMedium,
+                              ),
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: AlignmentDirectional(0.90, 0.00),
+                                child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                      'Dinner',
+                                      queryParameters: {
+                                        'mealtime': serializeParam(
+                                          'dinner',
+                                          ParamType.String,
+                                        ),
+                                        'tab': serializeParam(
+                                          _model.tabBarCurrentIndex,
+                                          ParamType.int,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ].divide(SizedBox(width: 10.0)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 60.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      alignment: AlignmentDirectional(0.00, 0.00),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Icon(
+                              Icons.local_mall_rounded,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              size: 24.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 0.0, 0.0, 0.0),
+                              child: Text(
+                                'Snacks',
+                                style: FlutterFlowTheme.of(context).labelMedium,
+                              ),
+                            ),
+                            Expanded(
+                              child: Align(
+                                alignment: AlignmentDirectional(0.90, 0.00),
+                                child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                      'Snack',
+                                      queryParameters: {
+                                        'mealtime': serializeParam(
+                                          'snack',
+                                          ParamType.String,
+                                        ),
+                                        'tab': serializeParam(
+                                          _model.tabBarCurrentIndex,
+                                          ParamType.int,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    size: 18.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

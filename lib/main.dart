@@ -134,9 +134,9 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'Macros': MacrosWidget(),
       'Home': HomeWidget(),
       'testWorkouts': TestWorkoutsWidget(),
+      'Macros': MacrosWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -157,14 +157,6 @@ class _NavBarPageState extends State<NavBarPage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.fastfood_outlined,
-              size: 24.0,
-            ),
-            label: 'Macros',
-            tooltip: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
               Icons.home_sharp,
               size: 24.0,
             ),
@@ -177,6 +169,14 @@ class _NavBarPageState extends State<NavBarPage> {
               size: 24.0,
             ),
             label: 'Workouts',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.fastfood_outlined,
+              size: 24.0,
+            ),
+            label: 'Macros',
             tooltip: '',
           )
         ],

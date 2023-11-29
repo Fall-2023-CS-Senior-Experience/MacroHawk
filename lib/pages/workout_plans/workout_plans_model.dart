@@ -13,18 +13,13 @@ class WorkoutPlansModel extends FlutterFlowModel<WorkoutPlansWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // Model for WorkoutSelect component.
-  late WorkoutSelectModel workoutSelectModel;
 
   /// Initialization and disposal methods.
 
-  void initState(BuildContext context) {
-    workoutSelectModel = createModel(context, () => WorkoutSelectModel());
-  }
+  void initState(BuildContext context) {}
 
   void dispose() {
     unfocusNode.dispose();
-    workoutSelectModel.dispose();
   }
 
   /// Action blocks are added here.

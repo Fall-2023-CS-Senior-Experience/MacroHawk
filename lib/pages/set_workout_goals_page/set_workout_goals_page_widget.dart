@@ -455,7 +455,7 @@ class _SetWorkoutGoalsPageWidgetState extends State<SetWorkoutGoalsPageWidget> {
                           16.0, 12.0, 16.0, 24.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          context.pushNamed('Home');
+                          context.goNamed('Home');
                         },
                         text: 'Next',
                         options: FFButtonOptions(

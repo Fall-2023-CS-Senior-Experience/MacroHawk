@@ -56,10 +56,15 @@ class NutritionsRecord extends FirestoreRecord {
   String get mealtime => _mealtime ?? '';
   bool hasMealtime() => _mealtime != null;
 
-  // "date" field.
-  DateTime? _date;
-  DateTime? get date => _date;
-  bool hasDate() => _date != null;
+  // "quantity" field.
+  String? _quantity;
+  String get quantity => _quantity ?? '';
+  bool hasQuantity() => _quantity != null;
+
+  // "measure" field.
+  String? _measure;
+  String get measure => _measure ?? '';
+  bool hasMeasure() => _measure != null;
 
   DocumentReference get parentReference => reference.parent.parent!;
 
@@ -72,7 +77,8 @@ class NutritionsRecord extends FirestoreRecord {
     _fats = snapshotData['fats'] as String?;
     _currentTime = snapshotData['current_time'] as DateTime?;
     _mealtime = snapshotData['mealtime'] as String?;
-    _date = snapshotData['date'] as DateTime?;
+    _quantity = snapshotData['quantity'] as String?;
+    _measure = snapshotData['measure'] as String?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -123,7 +129,8 @@ Map<String, dynamic> createNutritionsRecordData({
   String? fats,
   DateTime? currentTime,
   String? mealtime,
-  DateTime? date,
+  String? quantity,
+  String? measure,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -135,7 +142,8 @@ Map<String, dynamic> createNutritionsRecordData({
       'fats': fats,
       'current_time': currentTime,
       'mealtime': mealtime,
-      'date': date,
+      'quantity': quantity,
+      'measure': measure,
     }.withoutNulls,
   );
 
@@ -155,7 +163,8 @@ class NutritionsRecordDocumentEquality implements Equality<NutritionsRecord> {
         e1?.fats == e2?.fats &&
         e1?.currentTime == e2?.currentTime &&
         e1?.mealtime == e2?.mealtime &&
-        e1?.date == e2?.date;
+        e1?.quantity == e2?.quantity &&
+        e1?.measure == e2?.measure;
   }
 
   @override
@@ -168,7 +177,8 @@ class NutritionsRecordDocumentEquality implements Equality<NutritionsRecord> {
         e?.fats,
         e?.currentTime,
         e?.mealtime,
-        e?.date
+        e?.quantity,
+        e?.measure
       ]);
 
   @override

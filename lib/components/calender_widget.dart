@@ -1,8 +1,13 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/components/calender2_widget.dart';
 import '/flutter_flow/flutter_flow_calendar.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -101,20 +106,77 @@ class _CalenderWidgetState extends State<CalenderWidget> {
                 style: FlutterFlowTheme.of(context).bodyMedium,
               ),
               Text(
-                valueOrDefault<String>(
-                  dateTimeFormat('yMMMd', FFAppState().dateStart),
-                  'date',
-                ),
+                'Date Start\": ${_model.calendarSelectedDay?.start?.toString()}',
                 style: FlutterFlowTheme.of(context).bodyMedium,
               ),
             ].divide(SizedBox(width: 30.0)).addToStart(SizedBox(width: 10.0)),
+          ),
+          Text(
+            'End date: ${_model.calendarSelectedDay?.end?.toString()}',
+            style: FlutterFlowTheme.of(context).bodyMedium,
           ),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
             child: FFButtonWidget(
               onPressed: () async {
                 if (widget.tab == 'day') {
-                  Navigator.pop(context);
+                  _model.resultD = await queryNutritionsRecordOnce(
+                    parent: FFAppState().userIdRef,
+                    queryBuilder: (nutritionsRecord) => nutritionsRecord
+                        .where(
+                          'current_time',
+                          isGreaterThanOrEqualTo: FFAppState().dayS,
+                        )
+                        .where(
+                          'current_time',
+                          isLessThanOrEqualTo: FFAppState().dayE,
+                        ),
+                  );
+                  _model.updatePage(() {
+                    FFAppState().kalDay =
+                        functions.kcalSum(_model.resultD?.toList())! / 1000;
+                    FFAppState().fatD =
+                        functions.fatSum(_model.resultD?.toList())!;
+                    FFAppState().carbD =
+                        functions.carbSum(_model.resultD?.toList())!;
+                    FFAppState().proteinD =
+                        functions.proteinSum(_model.resultD?.toList())!;
+                  });
+                  _model.updatePage(() {
+                    FFAppState().insertAtIndexInKalmacros(
+                        0,
+                        functions.progressBar(
+                            FFAppState().kalDay, FFAppState().calorieGoal)!);
+                    FFAppState().insertAtIndexInCarbsProgressBar(
+                        0,
+                        functions.progressBar(
+                            FFAppState().carbD, FFAppState().carbGoal)!);
+                    FFAppState().insertAtIndexInProteinProgressBar(
+                        0,
+                        functions.progressBar(
+                            FFAppState().proteinD, FFAppState().proteinGoal)!);
+                    FFAppState().insertAtIndexInFatProgressBar(
+                        0,
+                        functions.progressBar(
+                            FFAppState().fatD, FFAppState().fatGoal)!);
+                    FFAppState().insertAtIndexInOffsetKal(
+                        0,
+                        functions.progressBarOffset(
+                            FFAppState().kalDay, FFAppState().calorieGoal)!);
+                    FFAppState().insertAtIndexInOffsetProtein(
+                        0,
+                        functions.progressBarOffset(
+                            FFAppState().proteinD, FFAppState().proteinGoal)!);
+                    FFAppState().insertAtIndexInOffsetFat(
+                        0,
+                        functions.progressBarOffset(
+                            FFAppState().fatD, FFAppState().fatGoal)!);
+                    FFAppState().insertAtIndexInOffsetCarbs(
+                        0,
+                        functions.progressBarOffset(
+                            FFAppState().carbD, FFAppState().carbGoal)!);
+                  });
+                  context.safePop();
                 } else {
                   await showModalBottomSheet(
                     isScrollControlled: true,
@@ -133,6 +195,8 @@ class _CalenderWidgetState extends State<CalenderWidget> {
 
                   Navigator.pop(context);
                 }
+
+                setState(() {});
               },
               text: 'Next',
               options: FFButtonOptions(

@@ -1,7 +1,7 @@
 // Export pages
 export '/not_used/workouts/workouts_widget.dart' show WorkoutsWidget;
-export '/pages/macros/macros_widget.dart' show MacrosWidget;
-export '/not_used/profile/profile_widget.dart' show ProfileWidget;
+export '/pages/macrosedit/macrosedit_widget.dart' show MacroseditWidget;
+export '/pages/profile/profile_widget.dart' show ProfileWidget;
 export '/pages/auth1/auth1_widget.dart' show Auth1Widget;
 export '/pages/workout_plans/workout_plans_widget.dart' show WorkoutPlansWidget;
 export '/pages/cardi_workout1/cardi_workout1_widget.dart'
@@ -24,9 +24,10 @@ export '/pages/set_workout_goals_page/set_workout_goals_page_widget.dart'
 export '/pages/lunch/lunch_widget.dart' show LunchWidget;
 export '/pages/dinner/dinner_widget.dart' show DinnerWidget;
 export '/pages/breakfast/breakfast_widget.dart' show BreakfastWidget;
-export '/test_workouts/add_exercise/add_exercise_widget.dart'
-    show AddExerciseWidget;
-export '/test_workouts/test_workouts/test_workouts_widget.dart'
+export '/muscle_group_a_p_i/muscle_group_a_p_i_widget.dart'
+    show MuscleGroupAPIWidget;
+export '/workouts/add_exercise/add_exercise_widget.dart' show AddExerciseWidget;
+export '/workouts/test_workouts/test_workouts_widget.dart'
     show TestWorkoutsWidget;
-export '/test_workouts/add_workout/add_workout_widget.dart'
-    show AddWorkoutWidget;
+export '/pages/macros/macros_widget.dart' show MacrosWidget;
+export '/pages/offline/offline_widget.dart' show OfflineWidget;

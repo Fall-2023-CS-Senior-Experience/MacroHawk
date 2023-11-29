@@ -1,7 +1,12 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_calendar.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -94,8 +99,16 @@ class _Calender2WidgetState extends State<Calender2Widget> {
               ),
               Text(
                 valueOrDefault<String>(
-                  dateTimeFormat('yMMMd', FFAppState().dateStart),
-                  'date',
+                  widget.tab == 'week'
+                      ? valueOrDefault<String>(
+                          dateTimeFormat('yMMMd', FFAppState().weekS),
+                          'date start',
+                        )
+                      : valueOrDefault<String>(
+                          dateTimeFormat('yMMMd', FFAppState().monthS),
+                          'end',
+                        ),
+                  'end date',
                 ),
                 style: FlutterFlowTheme.of(context).bodyMedium,
               ),
@@ -110,8 +123,13 @@ class _Calender2WidgetState extends State<Calender2Widget> {
               ),
               Text(
                 valueOrDefault<String>(
-                  dateTimeFormat('yMMMd', FFAppState().dateEnd),
-                  'date',
+                  widget.tab == 'week'
+                      ? valueOrDefault<String>(
+                          dateTimeFormat('yMMMd', FFAppState().weekE),
+                          'start',
+                        )
+                      : dateTimeFormat('yMMMd', FFAppState().monthE),
+                  'end date',
                 ),
                 style: FlutterFlowTheme.of(context).bodyMedium,
               ),
@@ -119,7 +137,125 @@ class _Calender2WidgetState extends State<Calender2Widget> {
           ),
           FFButtonWidget(
             onPressed: () async {
-              Navigator.pop(context);
+              if (widget.tab == 'week') {
+                _model.resultW = await queryNutritionsRecordOnce(
+                  parent: FFAppState().userIdRef,
+                  queryBuilder: (nutritionsRecord) => nutritionsRecord
+                      .where(
+                        'current_time',
+                        isGreaterThanOrEqualTo: FFAppState().weekS,
+                      )
+                      .where(
+                        'current_time',
+                        isLessThanOrEqualTo: FFAppState().weekE,
+                      ),
+                );
+                _model.updatePage(() {
+                  FFAppState().kcalW =
+                      functions.kcalSum(_model.resultW?.toList())! / 1000;
+                  FFAppState().fatW =
+                      functions.fatSum(_model.resultW?.toList())!;
+                  FFAppState().proteinW =
+                      functions.proteinSum(_model.resultW?.toList())!;
+                  FFAppState().carbW =
+                      functions.carbSum(_model.resultW?.toList())!;
+                });
+                _model.updatePage(() {
+                  FFAppState().insertAtIndexInKalmacros(
+                      1,
+                      functions.progressBar(
+                          FFAppState().kcalW, FFAppState().calorieGoal)!);
+                  FFAppState().insertAtIndexInCarbsProgressBar(
+                      1,
+                      functions.progressBar(
+                          FFAppState().carbW, FFAppState().carbGoal)!);
+                  FFAppState().insertAtIndexInProteinProgressBar(
+                      1,
+                      functions.progressBar(
+                          FFAppState().proteinW, FFAppState().proteinGoal)!);
+                  FFAppState().insertAtIndexInFatProgressBar(
+                      1,
+                      functions.progressBar(
+                          FFAppState().fatW, FFAppState().fatGoal)!);
+                  FFAppState().insertAtIndexInOffsetKal(
+                      1,
+                      functions.progressBarOffset(
+                          FFAppState().kcalW, FFAppState().calorieGoal)!);
+                  FFAppState().insertAtIndexInOffsetProtein(
+                      1,
+                      functions.progressBarOffset(
+                          FFAppState().proteinW, FFAppState().proteinGoal)!);
+                  FFAppState().insertAtIndexInOffsetFat(
+                      1,
+                      functions.progressBarOffset(
+                          FFAppState().fatW, FFAppState().fatGoal)!);
+                  FFAppState().insertAtIndexInOffsetCarbs(
+                      1,
+                      functions.progressBarOffset(
+                          FFAppState().carbW, FFAppState().carbGoal)!);
+                });
+              } else {
+                _model.resultM = await queryNutritionsRecordOnce(
+                  parent: FFAppState().userIdRef,
+                  queryBuilder: (nutritionsRecord) => nutritionsRecord
+                      .where(
+                        'current_time',
+                        isGreaterThanOrEqualTo: FFAppState().monthS,
+                      )
+                      .where(
+                        'current_time',
+                        isLessThanOrEqualTo: FFAppState().monthE,
+                      ),
+                );
+                _model.updatePage(() {
+                  FFAppState().kalM =
+                      functions.kcalSum(_model.resultM?.toList())! / 1000;
+                  FFAppState().proteinM =
+                      functions.proteinSum(_model.resultM?.toList())!;
+                  FFAppState().fatM =
+                      functions.fatSum(_model.resultM?.toList())!;
+                  FFAppState().carbM =
+                      functions.carbSum(_model.resultM?.toList())!;
+                });
+                _model.updatePage(() {
+                  FFAppState().insertAtIndexInKalmacros(
+                      2,
+                      functions.progressBar(
+                          FFAppState().kalM, FFAppState().calorieGoal)!);
+                  FFAppState().insertAtIndexInCarbsProgressBar(
+                      2,
+                      functions.progressBar(
+                          FFAppState().carbM, FFAppState().carbGoal)!);
+                  FFAppState().insertAtIndexInProteinProgressBar(
+                      2,
+                      functions.progressBar(
+                          FFAppState().proteinM, FFAppState().proteinGoal)!);
+                  FFAppState().insertAtIndexInFatProgressBar(
+                      2,
+                      functions.progressBar(
+                          FFAppState().fatM, FFAppState().fatGoal)!);
+                  FFAppState().insertAtIndexInOffsetKal(
+                      2,
+                      functions.progressBarOffset(
+                          FFAppState().kalM, FFAppState().calorieGoal)!);
+                  FFAppState().insertAtIndexInOffsetProtein(
+                      2,
+                      functions.progressBarOffset(
+                          FFAppState().proteinM, FFAppState().proteinGoal)!);
+                  FFAppState().insertAtIndexInOffsetFat(
+                      2,
+                      functions.progressBarOffset(
+                          FFAppState().fatM, FFAppState().fatGoal)!);
+                  FFAppState().insertAtIndexInOffsetCarbs(
+                      2,
+                      functions.progressBarOffset(
+                          FFAppState().carbM, FFAppState().carbGoal)!);
+                });
+              }
+
+              context.pushNamed('Macros');
+
+              setState(() {});
             },
             text: 'Done',
             options: FFButtonOptions(
