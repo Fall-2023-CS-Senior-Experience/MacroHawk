@@ -25,8 +25,6 @@ class MacrosCall {
         'app_id': "5ca95bf3",
         'app_key': "bc8c17d9d561592196d553ecf162d20d",
         'ingr': foodname,
-        'brand': brand,
-        'category': category,
       },
       returnBody: true,
       encodeBodyUtf8: false,
@@ -59,6 +57,53 @@ class MacrosCall {
         response,
         r'''$.parsed[:].food.image''',
       );
+  static dynamic quantity(dynamic response) => getJsonField(
+        response,
+        r'''$.parsed[:].quantity''',
+      );
+  static dynamic weight(dynamic response) => getJsonField(
+        response,
+        r'''$.parsed[:].measure.weight''',
+      );
+  static dynamic serving(dynamic response) => getJsonField(
+        response,
+        r'''$.parsed[:].measure.label''',
+      );
+  static dynamic servinglist(dynamic response) => getJsonField(
+        response,
+        r'''$.hints[:].measures[:].label''',
+        true,
+      );
+  static dynamic weightlist(dynamic response) => getJsonField(
+        response,
+        r'''$.hints[:].measures[:].weight''',
+        true,
+      );
+  static dynamic carbList(dynamic response) => getJsonField(
+        response,
+        r'''$.hints[:].food.nutrients.CHOCDF''',
+        true,
+      );
+  static dynamic fatList(dynamic response) => getJsonField(
+        response,
+        r'''$.hints[:].food.nutrients.FAT''',
+        true,
+      );
+  static dynamic proteinList(dynamic response) => getJsonField(
+        response,
+        r'''$.hints[:].food.nutrients.PROCNT''',
+        true,
+      );
+  static dynamic kcalList(dynamic response) => getJsonField(
+        response,
+        r'''$.hints[:].food.nutrients.ENERC_KCAL''',
+        true,
+      );
+  static dynamic nameList(dynamic response) => getJsonField(
+        response,
+        r'''$.hints[:].food.label''',
+        true,
+      );
 }
 
 class WorkoutsCall {
@@ -86,6 +131,42 @@ class WorkoutsCall {
       cache: false,
     );
   }
+
+  static dynamic muscleJSON(dynamic response) => getJsonField(
+        response,
+        r'''$''',
+        true,
+      );
+  static dynamic muscletype(dynamic response) => getJsonField(
+        response,
+        r'''$[:].type''',
+        true,
+      );
+  static dynamic musclemuscle(dynamic response) => getJsonField(
+        response,
+        r'''$[:].muscle''',
+        true,
+      );
+  static dynamic musclename(dynamic response) => getJsonField(
+        response,
+        r'''$[:].name''',
+        true,
+      );
+  static dynamic muscleequipment(dynamic response) => getJsonField(
+        response,
+        r'''$[:].equipment''',
+        true,
+      );
+  static dynamic muscledifficulties(dynamic response) => getJsonField(
+        response,
+        r'''$[:].difficulty''',
+        true,
+      );
+  static dynamic muscleinstructions(dynamic response) => getJsonField(
+        response,
+        r'''$[:].instructions''',
+        true,
+      );
 }
 
 class ApiPagingParams {

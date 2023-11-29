@@ -34,6 +34,8 @@ class _FoodApiResultsWidgetState extends State<FoodApiResultsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => FoodApiResultsModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

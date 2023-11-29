@@ -1,12 +1,15 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/upload_data.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'macrospop_widget.dart' show MacrospopWidget;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,10 +21,14 @@ class MacrospopModel extends FlutterFlowModel<MacrospopWidget> {
 
   ///  State fields for stateful widgets in this component.
 
-  // State field(s) for TextFieldName widget.
-  FocusNode? textFieldNameFocusNode;
-  TextEditingController? textFieldNameController;
-  String? Function(BuildContext, String?)? textFieldNameControllerValidator;
+  bool isDataUploading = false;
+  FFUploadedFile uploadedLocalFile =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+
+  // State field(s) for quanity widget.
+  FocusNode? quanityFocusNode;
+  TextEditingController? quanityController;
+  String? Function(BuildContext, String?)? quanityControllerValidator;
   // State field(s) for TextFieldCal widget.
   FocusNode? textFieldCalFocusNode;
   TextEditingController? textFieldCalController;
@@ -44,8 +51,8 @@ class MacrospopModel extends FlutterFlowModel<MacrospopWidget> {
   void initState(BuildContext context) {}
 
   void dispose() {
-    textFieldNameFocusNode?.dispose();
-    textFieldNameController?.dispose();
+    quanityFocusNode?.dispose();
+    quanityController?.dispose();
 
     textFieldCalFocusNode?.dispose();
     textFieldCalController?.dispose();

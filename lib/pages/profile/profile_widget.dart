@@ -25,6 +25,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ProfileModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -54,7 +56,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primary,
         automaticallyImplyLeading: true,
         title: Text(
-          'Profile',
+          'Settings',
           style: FlutterFlowTheme.of(context).titleMedium,
         ),
         actions: [],
@@ -121,21 +123,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 0.0),
-                              child: Text(
-                                currentUserEmail,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      color: Color(0xB4FFFFFF),
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -145,253 +132,103 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-            child: Material(
-              color: Colors.transparent,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 3.0,
-                      color: Color(0x33000000),
-                      offset: Offset(0.0, 1.0),
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    width: 0.0,
+          FFButtonWidget(
+            onPressed: () async {
+              setDarkModeSetting(context, ThemeMode.dark);
+            },
+            text: 'Switch to Dark Mode',
+            options: FFButtonOptions(
+              height: 40.0,
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+              color: FlutterFlowTheme.of(context).primary,
+              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                    fontFamily: 'Readex Pro',
+                    color: Colors.white,
                   ),
-                ),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                  child: InkWell(
-                    splashColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () async {
-                      context.pushNamed('Goals');
+              elevation: 3.0,
+              borderSide: BorderSide(
+                color: Colors.transparent,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          FFButtonWidget(
+            onPressed: () async {
+              setDarkModeSetting(context, ThemeMode.light);
+            },
+            text: 'Switch to Light Mode',
+            options: FFButtonOptions(
+              height: 40.0,
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+              color: FlutterFlowTheme.of(context).primary,
+              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                    fontFamily: 'Readex Pro',
+                    color: Colors.white,
+                  ),
+              elevation: 3.0,
+              borderSide: BorderSide(
+                color: Colors.transparent,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          FFButtonWidget(
+            onPressed: () async {
+              var confirmDialogResponse = await showDialog<bool>(
+                    context: context,
+                    builder: (alertDialogContext) {
+                      return AlertDialog(
+                        title: Text('Warning'),
+                        content: Text(
+                            'If you tap confirm, your data, including all workouts/macros, will be removed and cannot be accessed again. Are you sure you wish to continue?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pop(alertDialogContext, false),
+                            child: Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pop(alertDialogContext, true),
+                            child: Text('Confirm'),
+                          ),
+                        ],
+                      );
                     },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Set Goals',
-                          style: FlutterFlowTheme.of(context).bodyLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-            child: Material(
-              color: Colors.transparent,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 3.0,
-                      color: Color(0x33000000),
-                      offset: Offset(0.0, 1.0),
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    width: 0.0,
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Edit Profile',
-                        style: FlutterFlowTheme.of(context).bodyLarge,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-            child: Material(
-              color: Colors.transparent,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 3.0,
-                      color: Color(0x33000000),
-                      offset: Offset(0.0, 1.0),
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    width: 0.0,
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Change Password',
-                        style: FlutterFlowTheme.of(context).bodyLarge,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-            child: Material(
-              color: Colors.transparent,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 3.0,
-                      color: Color(0x33000000),
-                      offset: Offset(0.0, 1.0),
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    width: 0.0,
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Notification Settings',
-                        style: FlutterFlowTheme.of(context).bodyLarge,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-            child: Material(
-              color: Colors.transparent,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Container(
-                width: double.infinity,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 3.0,
-                      color: Color(0x33000000),
-                      offset: Offset(0.0, 1.0),
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                    width: 0.0,
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Terms of Services',
-                        style: FlutterFlowTheme.of(context).bodyLarge,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 40.0),
-            child: FFButtonWidget(
-              onPressed: () async {
-                GoRouter.of(context).prepareAuthEvent();
-                await authManager.signOut();
-                GoRouter.of(context).clearRedirectLocation();
+                  ) ??
+                  false;
+              FFAppState().update(() {
+                FFAppState().displayName = 'User';
+                FFAppState().randomUserInt = 0;
+                FFAppState().snacklist = [];
+                FFAppState().workoutDaysGoal = [];
+              });
 
-                context.goNamedAuth('SplashPage', context.mounted);
-              },
-              text: 'Log Out',
-              options: FFButtonOptions(
-                width: 110.0,
-                height: 50.0,
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                color: FlutterFlowTheme.of(context).secondaryBackground,
-                textStyle: FlutterFlowTheme.of(context).bodyLarge,
-                elevation: 3.0,
-                borderSide: BorderSide(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
+              context.pushNamed('SplashPage');
+            },
+            text: 'Clear Data / Sign Out',
+            options: FFButtonOptions(
+              height: 40.0,
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+              iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+              color: FlutterFlowTheme.of(context).primary,
+              textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                    fontFamily: 'Readex Pro',
+                    color: Colors.white,
+                  ),
+              elevation: 3.0,
+              borderSide: BorderSide(
+                color: Colors.transparent,
+                width: 1.0,
               ),
+              borderRadius: BorderRadius.circular(8.0),
             ),
           ),
-        ],
+        ].divide(SizedBox(height: 10.0)),
       ),
     );
   }

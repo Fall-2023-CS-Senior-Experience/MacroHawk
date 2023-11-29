@@ -26,6 +26,8 @@ class _WorkoutPlansWidgetState extends State<WorkoutPlansWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => WorkoutPlansModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -76,10 +78,33 @@ class _WorkoutPlansWidgetState extends State<WorkoutPlansWidget> {
             'Workouts',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
+                  color: FlutterFlowTheme.of(context).primaryBtnText,
                   fontSize: 37.0,
                 ),
           ),
-          actions: [],
+          actions: [
+            InkWell(
+              splashColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: () async {
+                context.pushNamed('Profile');
+              },
+              child: Container(
+                width: 120.0,
+                height: 120.0,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: Image.network(
+                  'https://picsum.photos/seed/300/600',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ],
           centerTitle: true,
           elevation: 2.0,
         ),
@@ -89,136 +114,45 @@ class _WorkoutPlansWidgetState extends State<WorkoutPlansWidget> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-                child: Material(
-                  color: Colors.transparent,
-                  elevation: 1.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    height: 120.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          12.0, 12.0, 12.0, 16.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 12.0, 0.0, 12.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Full Body Workout',
-                                    style: FlutterFlowTheme.of(context)
-                                        .labelMedium,
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(0.00, 0.00),
-                                    child: Text(
-                                      'A complete workout targeting all major muscle groups.',
-                                      textAlign: TextAlign.start,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+              FFButtonWidget(
+                onPressed: () async {
+                  await showModalBottomSheet(
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    enableDrag: false,
+                    context: context,
+                    builder: (context) {
+                      return GestureDetector(
+                        onTap: () => _model.unfocusNode.canRequestFocus
+                            ? FocusScope.of(context)
+                                .requestFocus(_model.unfocusNode)
+                            : FocusScope.of(context).unfocus(),
+                        child: Padding(
+                          padding: MediaQuery.viewInsetsOf(context),
+                          child: WorkoutSelectWidget(),
+                        ),
+                      );
+                    },
+                  ).then((value) => safeSetState(() {}));
+                },
+                text: 'Button',
+                options: FFButtonOptions(
+                  height: 40.0,
+                  padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                  iconPadding:
+                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  color: FlutterFlowTheme.of(context).primary,
+                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                        fontFamily: 'Readex Pro',
+                        color: Colors.white,
                       ),
-                    ),
+                  elevation: 3.0,
+                  borderSide: BorderSide(
+                    color: Colors.transparent,
+                    width: 1.0,
                   ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-                child: Material(
-                  color: Colors.transparent,
-                  elevation: 1.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    height: 120.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          12.0, 12.0, 12.0, 16.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 12.0, 0.0, 12.0),
-                              child: InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  context.pushNamed('CardiWorkout1');
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Cardio Blast',
-                                      style: FlutterFlowTheme.of(context)
-                                          .labelMedium,
-                                    ),
-                                    Align(
-                                      alignment:
-                                          AlignmentDirectional(0.00, 0.00),
-                                      child: Text(
-                                        'High-intensity cardio exercises to get your heart pumping.',
-                                        textAlign: TextAlign.start,
-                                        maxLines: 2,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              wrapWithModel(
-                model: _model.workoutSelectModel,
-                updateCallback: () => setState(() {}),
-                child: WorkoutSelectWidget(),
               ),
             ],
           ),

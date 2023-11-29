@@ -110,16 +110,23 @@ class _Auth1WidgetState extends State<Auth1Widget>
     )..addListener(() => setState(() {}));
     _model.emailAddressController ??= TextEditingController();
     _model.emailAddressFocusNode ??= FocusNode();
+
     _model.passwordController ??= TextEditingController();
     _model.passwordFocusNode ??= FocusNode();
+
     _model.displayNameController ??= TextEditingController();
     _model.displayNameFocusNode ??= FocusNode();
+
     _model.emailCreateController ??= TextEditingController();
     _model.emailCreateFocusNode ??= FocusNode();
+
     _model.passwordCreateController ??= TextEditingController();
     _model.passwordCreateFocusNode ??= FocusNode();
+
     _model.passwordConfirmCreateController ??= TextEditingController();
     _model.passwordConfirmCreateFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

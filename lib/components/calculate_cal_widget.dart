@@ -27,6 +27,8 @@ class _CalculateCalWidgetState extends State<CalculateCalWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CalculateCalModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

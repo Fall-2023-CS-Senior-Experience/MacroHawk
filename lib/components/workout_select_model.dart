@@ -2,6 +2,7 @@ import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'workout_select_widget.dart' show WorkoutSelectWidget;
 import 'package:flutter/material.dart';
@@ -12,14 +13,12 @@ import 'package:provider/provider.dart';
 class WorkoutSelectModel extends FlutterFlowModel<WorkoutSelectWidget> {
   ///  State fields for stateful widgets in this component.
 
-  // State field(s) for DropDown widget.
-  String? dropDownValue1;
-  FormFieldController<String>? dropDownValueController1;
-  // Stores action output result for [Backend Call - API (Workouts)] action in DropDown widget.
-  ApiCallResponse? apiResultkan;
-  // State field(s) for DropDown widget.
-  String? dropDownValue2;
-  FormFieldController<String>? dropDownValueController2;
+  // State field(s) for TypeofWorkout widget.
+  String? typeofWorkoutValue;
+  FormFieldController<String>? typeofWorkoutValueController;
+  // State field(s) for dropMuscle widget.
+  String? dropMuscleValue;
+  FormFieldController<String>? dropMuscleValueController;
 
   /// Initialization and disposal methods.
 

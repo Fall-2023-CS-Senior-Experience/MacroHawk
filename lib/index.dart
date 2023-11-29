@@ -1,9 +1,8 @@
 // Export pages
-export '/pages/workouts/workouts_widget.dart' show WorkoutsWidget;
-export '/pages/macros/macros_widget.dart' show MacrosWidget;
+export '/not_used/workouts/workouts_widget.dart' show WorkoutsWidget;
+export '/pages/macrosedit/macrosedit_widget.dart' show MacroseditWidget;
 export '/pages/profile/profile_widget.dart' show ProfileWidget;
 export '/pages/auth1/auth1_widget.dart' show Auth1Widget;
-export '/pages/breakfast/breakfast_widget.dart' show BreakfastWidget;
 export '/pages/workout_plans/workout_plans_widget.dart' show WorkoutPlansWidget;
 export '/pages/cardi_workout1/cardi_workout1_widget.dart'
     show CardiWorkout1Widget;
@@ -11,8 +10,6 @@ export '/pages/cardio_blast_begin/cardio_blast_begin_widget.dart'
     show CardioBlastBeginWidget;
 export '/pages/food_api_results/food_api_results_widget.dart'
     show FoodApiResultsWidget;
-export '/pages/lunch/lunch_widget.dart' show LunchWidget;
-export '/pages/dinner/dinner_widget.dart' show DinnerWidget;
 export '/pages/snack/snack_widget.dart' show SnackWidget;
 export '/pages/goals/goals_widget.dart' show GoalsWidget;
 export '/pages/home/home_widget.dart' show HomeWidget;
@@ -22,5 +19,15 @@ export '/chosen_workout/chosen_workout_widget.dart' show ChosenWorkoutWidget;
 export '/pages/name_page/name_page_widget.dart' show NamePageWidget;
 export '/pages/set_nutri_goals_page/set_nutri_goals_page_widget.dart'
     show SetNutriGoalsPageWidget;
-export '/pages/set_workout_goals_page_copy/set_workout_goals_page_copy_widget.dart'
-    show SetWorkoutGoalsPageCopyWidget;
+export '/pages/set_workout_goals_page/set_workout_goals_page_widget.dart'
+    show SetWorkoutGoalsPageWidget;
+export '/pages/lunch/lunch_widget.dart' show LunchWidget;
+export '/pages/dinner/dinner_widget.dart' show DinnerWidget;
+export '/pages/breakfast/breakfast_widget.dart' show BreakfastWidget;
+export '/muscle_group_a_p_i/muscle_group_a_p_i_widget.dart'
+    show MuscleGroupAPIWidget;
+export '/workouts/add_exercise/add_exercise_widget.dart' show AddExerciseWidget;
+export '/workouts/test_workouts/test_workouts_widget.dart'
+    show TestWorkoutsWidget;
+export '/pages/macros/macros_widget.dart' show MacrosWidget;
+export '/pages/offline/offline_widget.dart' show OfflineWidget;

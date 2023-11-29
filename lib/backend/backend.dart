@@ -9,6 +9,8 @@ import 'schema/users_record.dart';
 import 'schema/nutrition_record.dart';
 import 'schema/user_macro_log_record.dart';
 import 'schema/workouts_record.dart';
+import 'schema/users_names_record.dart';
+import 'schema/nutritions_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,6 +22,8 @@ export 'schema/users_record.dart';
 export 'schema/nutrition_record.dart';
 export 'schema/user_macro_log_record.dart';
 export 'schema/workouts_record.dart';
+export 'schema/users_names_record.dart';
+export 'schema/nutritions_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -167,6 +171,83 @@ Future<List<WorkoutsRecord>> queryWorkoutsRecordOnce({
     queryCollectionOnce(
       WorkoutsRecord.collection,
       WorkoutsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query UsersNamesRecords (as a Stream and as a Future).
+Future<int> queryUsersNamesRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      UsersNamesRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<UsersNamesRecord>> queryUsersNamesRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      UsersNamesRecord.collection,
+      UsersNamesRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<UsersNamesRecord>> queryUsersNamesRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      UsersNamesRecord.collection,
+      UsersNamesRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query NutritionsRecords (as a Stream and as a Future).
+Future<int> queryNutritionsRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      NutritionsRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<NutritionsRecord>> queryNutritionsRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      NutritionsRecord.collection(parent),
+      NutritionsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<NutritionsRecord>> queryNutritionsRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      NutritionsRecord.collection(parent),
+      NutritionsRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

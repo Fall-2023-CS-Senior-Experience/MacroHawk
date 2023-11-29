@@ -42,12 +42,17 @@ class _SetNutriGoalsPageWidgetState extends State<SetNutriGoalsPageWidget> {
 
     _model.calorieGoalFieldController ??= TextEditingController();
     _model.calorieGoalFieldFocusNode ??= FocusNode();
+
     _model.fatGoalFieldController ??= TextEditingController();
     _model.fatGoalFieldFocusNode ??= FocusNode();
+
     _model.carbGoalFieldController ??= TextEditingController();
     _model.carbGoalFieldFocusNode ??= FocusNode();
+
     _model.proteinGoalFieldController ??= TextEditingController();
     _model.proteinGoalFieldFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -412,7 +417,7 @@ class _SetNutriGoalsPageWidgetState extends State<SetNutriGoalsPageWidget> {
                           FFAppState().proteinGoal =
                               int.parse(_model.proteinGoalFieldController.text);
 
-                          context.pushNamed('setWorkoutGoalsPageCopy');
+                          context.pushNamed('setWorkoutGoalsPage');
                         },
                         text: 'Next',
                         options: FFButtonOptions(

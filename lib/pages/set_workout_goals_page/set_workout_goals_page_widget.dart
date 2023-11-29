@@ -8,20 +8,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'set_workout_goals_page_copy_model.dart';
-export 'set_workout_goals_page_copy_model.dart';
+import 'set_workout_goals_page_model.dart';
+export 'set_workout_goals_page_model.dart';
 
-class SetWorkoutGoalsPageCopyWidget extends StatefulWidget {
-  const SetWorkoutGoalsPageCopyWidget({Key? key}) : super(key: key);
+class SetWorkoutGoalsPageWidget extends StatefulWidget {
+  const SetWorkoutGoalsPageWidget({Key? key}) : super(key: key);
 
   @override
-  _SetWorkoutGoalsPageCopyWidgetState createState() =>
-      _SetWorkoutGoalsPageCopyWidgetState();
+  _SetWorkoutGoalsPageWidgetState createState() =>
+      _SetWorkoutGoalsPageWidgetState();
 }
 
-class _SetWorkoutGoalsPageCopyWidgetState
-    extends State<SetWorkoutGoalsPageCopyWidget> {
-  late SetWorkoutGoalsPageCopyModel _model;
+class _SetWorkoutGoalsPageWidgetState extends State<SetWorkoutGoalsPageWidget> {
+  late SetWorkoutGoalsPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late StreamSubscription<bool> _keyboardVisibilitySubscription;
@@ -30,7 +29,7 @@ class _SetWorkoutGoalsPageCopyWidgetState
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SetWorkoutGoalsPageCopyModel());
+    _model = createModel(context, () => SetWorkoutGoalsPageModel());
 
     if (!isWeb) {
       _keyboardVisibilitySubscription =
@@ -40,6 +39,8 @@ class _SetWorkoutGoalsPageCopyWidgetState
         });
       });
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -454,7 +455,7 @@ class _SetWorkoutGoalsPageCopyWidgetState
                           16.0, 12.0, 16.0, 24.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          context.pushNamed('Home');
+                          context.goNamed('Home');
                         },
                         text: 'Next',
                         options: FFButtonOptions(

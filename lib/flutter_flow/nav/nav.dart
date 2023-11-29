@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -93,15 +94,28 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => WorkoutsWidget(),
         ),
         FFRoute(
-          name: 'Macros',
-          path: '/macros',
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Macros')
-              : MacrosWidget(),
+          name: 'Macrosedit',
+          path: '/macrosedit',
+          asyncParams: {
+            'dquery': getDocList(
+                ['users_names', 'nutritions'], NutritionsRecord.fromSnapshot),
+            'wkquery': getDocList(
+                ['users_names', 'nutritions'], NutritionsRecord.fromSnapshot),
+            'mquery': getDocList(
+                ['users_names', 'nutritions'], NutritionsRecord.fromSnapshot),
+          },
+          builder: (context, params) => MacroseditWidget(
+            dquery: params.getParam<NutritionsRecord>(
+                'dquery', ParamType.Document, true),
+            wkquery: params.getParam<NutritionsRecord>(
+                'wkquery', ParamType.Document, true),
+            mquery: params.getParam<NutritionsRecord>(
+                'mquery', ParamType.Document, true),
+          ),
         ),
         FFRoute(
           name: 'Profile',
-          path: '/profile',
+          path: '/Profile',
           builder: (context, params) => ProfileWidget(),
         ),
         FFRoute(
@@ -110,18 +124,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Auth1Widget(),
         ),
         FFRoute(
-          name: 'Breakfast',
-          path: '/breakfast',
-          builder: (context, params) => BreakfastWidget(
-            mealtime: params.getParam('mealtime', ParamType.String),
-          ),
-        ),
-        FFRoute(
           name: 'WorkoutPlans',
           path: '/workoutPlans',
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'WorkoutPlans')
-              : WorkoutPlansWidget(),
+          builder: (context, params) => WorkoutPlansWidget(),
         ),
         FFRoute(
           name: 'CardiWorkout1',
@@ -143,24 +148,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'Lunch',
-          path: '/lunch',
-          builder: (context, params) => LunchWidget(
-            mealtime: params.getParam('mealtime', ParamType.String),
-          ),
-        ),
-        FFRoute(
-          name: 'Dinner',
-          path: '/dinner',
-          builder: (context, params) => DinnerWidget(
-            mealtime: params.getParam('mealtime', ParamType.String),
-          ),
-        ),
-        FFRoute(
           name: 'Snack',
           path: '/snack',
           builder: (context, params) => SnackWidget(
             mealtime: params.getParam('mealtime', ParamType.String),
+            tab: params.getParam('tab', ParamType.int),
           ),
         ),
         FFRoute(
@@ -182,7 +174,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'WorkoutOptions',
           path: '/workoutOptions',
-          builder: (context, params) => WorkoutOptionsWidget(),
+          builder: (context, params) => WorkoutOptionsWidget(
+            musclegroup: params.getParam('musclegroup', ParamType.String),
+            typeofAPICall: params.getParam('typeofAPICall', ParamType.String),
+          ),
         ),
         FFRoute(
           name: 'ChosenWorkout',
@@ -200,9 +195,64 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SetNutriGoalsPageWidget(),
         ),
         FFRoute(
-          name: 'setWorkoutGoalsPageCopy',
-          path: '/setWorkoutGoalsPageCopy',
-          builder: (context, params) => SetWorkoutGoalsPageCopyWidget(),
+          name: 'setWorkoutGoalsPage',
+          path: '/setWorkoutGoalsPage',
+          builder: (context, params) => SetWorkoutGoalsPageWidget(),
+        ),
+        FFRoute(
+          name: 'Lunch',
+          path: '/lunch',
+          builder: (context, params) => LunchWidget(
+            mealtime: params.getParam('mealtime', ParamType.String),
+            tab: params.getParam('tab', ParamType.int),
+          ),
+        ),
+        FFRoute(
+          name: 'Dinner',
+          path: '/dinner',
+          builder: (context, params) => DinnerWidget(
+            mealtime: params.getParam('mealtime', ParamType.String),
+            tab: params.getParam('tab', ParamType.int),
+          ),
+        ),
+        FFRoute(
+          name: 'Breakfast',
+          path: '/breakfast',
+          builder: (context, params) => BreakfastWidget(
+            mealtime: params.getParam('mealtime', ParamType.String),
+            tab: params.getParam('tab', ParamType.int),
+          ),
+        ),
+        FFRoute(
+          name: 'MuscleGroupAPI',
+          path: '/muscleGroupAPI',
+          builder: (context, params) => MuscleGroupAPIWidget(
+            musclegroup: params.getParam('musclegroup', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'addExercise',
+          path: '/addExercise',
+          builder: (context, params) => AddExerciseWidget(),
+        ),
+        FFRoute(
+          name: 'testWorkouts',
+          path: '/testWorkouts',
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'testWorkouts')
+              : TestWorkoutsWidget(),
+        ),
+        FFRoute(
+          name: 'Macros',
+          path: '/macros',
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Macros')
+              : MacrosWidget(),
+        ),
+        FFRoute(
+          name: 'Offline',
+          path: '/offline',
+          builder: (context, params) => OfflineWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

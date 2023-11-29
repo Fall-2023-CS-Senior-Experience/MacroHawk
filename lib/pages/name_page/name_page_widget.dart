@@ -1,8 +1,12 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:async';
+import '/flutter_flow/random_data_util.dart' as random_data;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -41,6 +45,8 @@ class _NamePageWidgetState extends State<NamePageWidget> {
 
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -214,6 +220,21 @@ class _NamePageWidgetState extends State<NamePageWidget> {
                       child: FFButtonWidget(
                         onPressed: () async {
                           FFAppState().displayName = _model.textController.text;
+                          setState(() {
+                            FFAppState().randomUserInt =
+                                random_data.randomInteger(0, 1000000);
+                          });
+                          setState(() {
+                            FFAppState().username =
+                                '${FFAppState().displayName}${FFAppState().randomUserInt.toString()}';
+                          });
+
+                          await UsersNamesRecord.collection
+                              .doc()
+                              .set(createUsersNamesRecordData(
+                                username:
+                                    '${FFAppState().displayName}${FFAppState().randomUserInt.toString()}',
+                              ));
 
                           context.pushNamed('setNutriGoalsPage');
                         },

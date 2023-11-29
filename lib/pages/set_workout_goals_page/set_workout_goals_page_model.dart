@@ -3,16 +3,15 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:async';
-import 'set_workout_goals_page_copy_widget.dart'
-    show SetWorkoutGoalsPageCopyWidget;
+import 'set_workout_goals_page_widget.dart' show SetWorkoutGoalsPageWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class SetWorkoutGoalsPageCopyModel
-    extends FlutterFlowModel<SetWorkoutGoalsPageCopyWidget> {
+class SetWorkoutGoalsPageModel
+    extends FlutterFlowModel<SetWorkoutGoalsPageWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

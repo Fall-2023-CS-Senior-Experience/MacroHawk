@@ -54,12 +54,15 @@ class _WorkoutsWidgetState extends State<WorkoutsWidget>
     )..addListener(() => setState(() {}));
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+
     setupAnimations(
       animationsMap.values.where((anim) =>
           anim.trigger == AnimationTrigger.onActionTrigger ||
           !anim.applyInitialState),
       this,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -215,7 +218,7 @@ class _WorkoutsWidgetState extends State<WorkoutsWidget>
                                       decoration: BoxDecoration(
                                         color: Color(0x4D9489F5),
                                         borderRadius:
-                                            BorderRadius.circular(12.0),
+                                            BorderRadius.circular(10.0),
                                         border: Border.all(
                                           color: Color(0xFF6F61EF),
                                           width: 2.0,

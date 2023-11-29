@@ -2,6 +2,7 @@ import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +31,8 @@ class _WorkoutSelectWidgetState extends State<WorkoutSelectWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => WorkoutSelectModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -147,13 +150,13 @@ class _WorkoutSelectWidgetState extends State<WorkoutSelectWidget> {
                                       ),
                                     );
                                   }
-                                  final dropDownWorkoutsResponse =
+                                  final typeofWorkoutWorkoutsResponse =
                                       snapshot.data!;
                                   return FlutterFlowDropDown<String>(
                                     controller:
-                                        _model.dropDownValueController1 ??=
+                                        _model.typeofWorkoutValueController ??=
                                             FormFieldController<String>(
-                                      _model.dropDownValue1 ??= '',
+                                      _model.typeofWorkoutValue ??= '',
                                     ),
                                     options: List<String>.from([
                                       'cardio',
@@ -174,12 +177,21 @@ class _WorkoutSelectWidgetState extends State<WorkoutSelectWidget> {
                                       'Strongman'
                                     ],
                                     onChanged: (val) async {
-                                      setState(
-                                          () => _model.dropDownValue1 = val);
-                                      _model.apiResultkan =
-                                          await WorkoutsCall.call();
-
-                                      setState(() {});
+                                      setState(() =>
+                                          _model.typeofWorkoutValue = val);
+                                      context.pushNamed(
+                                        'WorkoutOptions',
+                                        queryParameters: {
+                                          'musclegroup': serializeParam(
+                                            _model.typeofWorkoutValue,
+                                            ParamType.String,
+                                          ),
+                                          'typeofAPICall': serializeParam(
+                                            'type',
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
                                     },
                                     width: 300.0,
                                     height: 50.0,
@@ -235,11 +247,30 @@ class _WorkoutSelectWidgetState extends State<WorkoutSelectWidget> {
                           children: [
                             Expanded(
                               child: FlutterFlowDropDown<String>(
-                                controller: _model.dropDownValueController2 ??=
-                                    FormFieldController<String>(null),
-                                options: ['Option 1'],
-                                onChanged: (val) =>
-                                    setState(() => _model.dropDownValue2 = val),
+                                controller: _model.dropMuscleValueController ??=
+                                    FormFieldController<String>(
+                                  _model.dropMuscleValue ??= 'biceps',
+                                ),
+                                options: [
+                                  'abdominals',
+                                  'abductors',
+                                  'adductors',
+                                  'biceps',
+                                  'calves',
+                                  'chest',
+                                  'forearms',
+                                  'glutes',
+                                  'hamstrings',
+                                  'lats',
+                                  'lower_back',
+                                  'middle_back',
+                                  'neck',
+                                  'quadriceps',
+                                  'traps',
+                                  'triceps'
+                                ],
+                                onChanged: (val) => setState(
+                                    () => _model.dropMuscleValue = val),
                                 width: 300.0,
                                 height: 50.0,
                                 textStyle:
@@ -263,6 +294,44 @@ class _WorkoutSelectWidgetState extends State<WorkoutSelectWidget> {
                                 hidesUnderline: true,
                                 isSearchable: false,
                                 isMultiSelect: false,
+                              ),
+                            ),
+                            FFButtonWidget(
+                              onPressed: () async {
+                                context.pushNamed(
+                                  'WorkoutOptions',
+                                  queryParameters: {
+                                    'musclegroup': serializeParam(
+                                      _model.dropMuscleValue,
+                                      ParamType.String,
+                                    ),
+                                    'typeofAPICall': serializeParam(
+                                      'muscle',
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls,
+                                );
+                              },
+                              text: 'Button',
+                              options: FFButtonOptions(
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: Colors.white,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ],

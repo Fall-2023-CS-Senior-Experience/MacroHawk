@@ -28,5 +28,24 @@ service cloud.firestore {
       allow write: if false;
       allow delete: if false;
     }
+
+    match /users_names/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /users_names/{parent}/nutritions/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /{path=**}/nutritions/{document} {
+      allow read: if true;
+    }
+
   }
 }

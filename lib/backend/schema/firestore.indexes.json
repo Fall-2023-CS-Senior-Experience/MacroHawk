@@ -1,3 +1,46 @@
 {
-  "indexes": []
+  "indexes": [
+    {
+      "collectionGroup": "workouts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "username",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "completedDays",
+          "arrayConfig": "CONTAINS"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "workouts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "username",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "plannedDays",
+          "arrayConfig": "CONTAINS"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "nutritions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "mealtime",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "current_time",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ]
 }

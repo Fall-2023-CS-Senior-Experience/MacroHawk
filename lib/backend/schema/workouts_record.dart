@@ -26,9 +26,51 @@ class WorkoutsRecord extends FirestoreRecord {
   String get desc => _desc ?? '';
   bool hasDesc() => _desc != null;
 
+  // "reps" field.
+  int? _reps;
+  int get reps => _reps ?? 0;
+  bool hasReps() => _reps != null;
+
+  // "weight" field.
+  int? _weight;
+  int get weight => _weight ?? 0;
+  bool hasWeight() => _weight != null;
+
+  // "category" field.
+  String? _category;
+  String get category => _category ?? '';
+  bool hasCategory() => _category != null;
+
+  // "completedDays" field.
+  List<String>? _completedDays;
+  List<String> get completedDays => _completedDays ?? const [];
+  bool hasCompletedDays() => _completedDays != null;
+
+  // "displayName" field.
+  String? _displayName;
+  String get displayName => _displayName ?? '';
+  bool hasDisplayName() => _displayName != null;
+
+  // "plannedDays" field.
+  List<String>? _plannedDays;
+  List<String> get plannedDays => _plannedDays ?? const [];
+  bool hasPlannedDays() => _plannedDays != null;
+
+  // "username" field.
+  String? _username;
+  String get username => _username ?? '';
+  bool hasUsername() => _username != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _desc = snapshotData['desc'] as String?;
+    _reps = castToType<int>(snapshotData['reps']);
+    _weight = castToType<int>(snapshotData['weight']);
+    _category = snapshotData['category'] as String?;
+    _completedDays = getDataList(snapshotData['completedDays']);
+    _displayName = snapshotData['displayName'] as String?;
+    _plannedDays = getDataList(snapshotData['plannedDays']);
+    _username = snapshotData['username'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -68,11 +110,21 @@ class WorkoutsRecord extends FirestoreRecord {
 Map<String, dynamic> createWorkoutsRecordData({
   String? name,
   String? desc,
+  int? reps,
+  int? weight,
+  String? category,
+  String? displayName,
+  String? username,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'name': name,
       'desc': desc,
+      'reps': reps,
+      'weight': weight,
+      'category': category,
+      'displayName': displayName,
+      'username': username,
     }.withoutNulls,
   );
 
@@ -84,11 +136,30 @@ class WorkoutsRecordDocumentEquality implements Equality<WorkoutsRecord> {
 
   @override
   bool equals(WorkoutsRecord? e1, WorkoutsRecord? e2) {
-    return e1?.name == e2?.name && e1?.desc == e2?.desc;
+    const listEquality = ListEquality();
+    return e1?.name == e2?.name &&
+        e1?.desc == e2?.desc &&
+        e1?.reps == e2?.reps &&
+        e1?.weight == e2?.weight &&
+        e1?.category == e2?.category &&
+        listEquality.equals(e1?.completedDays, e2?.completedDays) &&
+        e1?.displayName == e2?.displayName &&
+        listEquality.equals(e1?.plannedDays, e2?.plannedDays) &&
+        e1?.username == e2?.username;
   }
 
   @override
-  int hash(WorkoutsRecord? e) => const ListEquality().hash([e?.name, e?.desc]);
+  int hash(WorkoutsRecord? e) => const ListEquality().hash([
+        e?.name,
+        e?.desc,
+        e?.reps,
+        e?.weight,
+        e?.category,
+        e?.completedDays,
+        e?.displayName,
+        e?.plannedDays,
+        e?.username
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is WorkoutsRecord;
